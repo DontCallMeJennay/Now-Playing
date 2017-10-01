@@ -14,10 +14,10 @@ This project was inspired by the [freeCodeCamp](https://freecodecamp.com) API pr
 * The information will initially be indicated with color-changing, numbered icons; tapping or clicking an icon will bring up a list of available content.
 * The user can select an item on the list and go to that site or app to view the content.
 
-* Wish list
- * (?) The user can clear all notifications or request an update.
- * (?) The app will check for new info on startup and every hour it's active.
- * (?) For social apps, the user will receive push notifications about friends' activity.
+### Wish list
+* (?) The user can clear all notifications or request an update.
+* (?) The app will check for new info on startup and every hour it's active.
+* (?) For social apps, the user will receive push notifications about friends' activity.
 
 ## Tools and technologies
 * **MEVN stack, minus the M.**
@@ -25,7 +25,7 @@ This project was inspired by the [freeCodeCamp](https://freecodecamp.com) API pr
 * **Social media and entertainment services.** YouTube, Twitch.tv, and Twitter have well-documented APIs and OAuth support, so they are logical starting points. Also investigating Steam, Netflix, Facebook, and HBO Go.
 * **OAuth and/or OpenID.** Some (most?) of the services have built-in authentication support, so why reinvent the wheel?
 * **HTTPS hosting.** Or does that go without saying?
-* **HARD MODE: Create out-of-browser experiences.**
+### **HARD MODE: Create out-of-browser experiences.**
  * (?) Convert to desktop app with Electron
  * (?) Convert to phone app with Cordova
  * (?) Research service workers, progressive web apps, or whatever it is that causes notifications on smartphones and in Windows 10.
