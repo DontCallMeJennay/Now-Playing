@@ -25,7 +25,8 @@ This project was inspired by the [freeCodeCamp](https://freecodecamp.com) API pr
 * **Social media and entertainment services.** YouTube, Twitch.tv, and Twitter have well-documented APIs and OAuth support, so they are logical starting points. Also investigating Steam, Netflix, Facebook, and HBO Go.
 * **OAuth and/or OpenID.** Some (most?) of the services have built-in authentication support, so why reinvent the wheel?
 * **HTTPS hosting.** Or does that go without saying?
-### **HARD MODE: Create out-of-browser experiences.**
+
+### HARD MODE: Create out-of-browser experiences.
  * (?) Convert to desktop app with Electron
  * (?) Convert to phone app with Cordova
  * (?) Research service workers, progressive web apps, or whatever it is that causes notifications on smartphones and in Windows 10.
