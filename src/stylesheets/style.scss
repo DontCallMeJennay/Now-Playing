@@ -1,0 +1,168 @@
+$tpurple: #4B367C;
+$gold: #B59243;
+$whgreen: #F7FCB0;
+$ltgreen: #D6DC76;
+$green: #ACB342;
+
+$dkteal: #005D5D;
+$teal: #007777;
+$ltteal: #009999;
+
+$vblue: #000010;
+$vred: #100000;
+$vgreen: #001000;
+
+a {
+	text-decoration: none;
+}
+
+body {
+    background-color: black;
+    background: linear-gradient(to top right, black, $vblue, black, $vred, black, $vgreen, black);
+    background-size: cover;
+    color: #F7CB5B;
+    font-family: 'Exo 2', sans-serif;
+    margin: 5% auto;
+    max-width: 1000px;
+    min-height: 99vh;
+    overflow-y: scroll;
+}
+
+h1 {
+    font-family: 'Poller One', sans-serif;
+    text-shadow: 2px 2px black;
+}
+
+table {
+    margin: 0 auto;
+}
+
+.twitch {
+	a:link {
+		color: $whgreen;
+	}
+    a:active,
+    a:hover {
+        color: $ltgreen;
+    }
+    a:visited {
+        color: $green;
+    }
+    td {
+        background-color: $tpurple;
+        background: linear-gradient(to bottom, ($tpurple + #111), $tpurple);
+        border: 1px inset $tpurple;
+        color: $whgreen;
+        padding: 5px;
+        text-align: center;
+    }
+}
+
+.you {
+    td:not(.red) {
+        background-color: white;
+        background: linear-gradient(to bottom, (white), #FEE);
+        border: 1px inset $dkteal;
+        color: black;
+        padding: 5px;
+        text-align: center;
+    }
+    a:link {
+        color: $ltteal;
+    }
+    a:active,
+    a:hover {
+        color: $teal;
+    }
+    a:visited {
+        color: $dkteal;
+    }
+    .red {
+        background-color: red !important;
+        background: linear-gradient(to bottom, #F00, #C00);
+    }
+}
+
+header {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    margin-bottom: 0;
+    span {
+        display: flex;
+        flex-flow: row;
+        justify-content: flex-end;
+        margin: 0;
+    }
+}
+
+section {
+    margin-top: 0;
+}
+
+img {
+    border-radius: 50px;
+    height: 3em;
+    margin: 5px;
+    width: 3em;
+}
+
+footer {
+    margin: 1% auto;
+    text-align: center;
+}
+
+hr {
+    border: 2px double #F7CB5B;
+}
+
+button {
+    background-color: black;
+    color: $gold;
+    border: 2px solid ($gold - #333);
+    border-radius: 50px;
+    margin: auto;
+    min-width: 10%;
+    padding: 0.75em;
+    line-height: 1;
+}
+
+button:focus {
+	outline: none;
+}
+
+.names {
+    font-family: "Poller One", sans-serif;
+    font-size: 1.25em;
+    padding: 0 5px;
+}
+
+.btn-lit {
+    background-color: $gold + #222;
+    background: radial-gradient(($gold + #333), $gold);
+    color: black;
+}
+
+@media screen and (max-width: 800px) {
+    body {
+        margin: 2%;
+    }
+    .names {
+        font-size: 1em;
+    }
+    .sm-hide {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    body {
+        font-size: 0.75rem;
+    }
+
+    img {
+        height: 2em;
+        margin: auto;
+        width: 2em;
+    }
+}

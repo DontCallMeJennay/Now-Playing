@@ -1,0 +1,26 @@
+{
+  "name": "now-playing",
+  "version": "1.0.0",
+  "description": "Dashboard for streams and videos",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"gulp\" \"http-server -p 7441 --watch\"",
+    "tohtml": "pug src/views -b src/views -o build/views -w",
+    "test": "mocha"
+  },
+  "author": "Jenni Corbus",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "concurrently": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-imagemin": "^3.3.0",
+    "gulp-ruby-sass": "^2.1.1",
+    "gulp-uglify": "^3.0.0",
+    "nodemon": "^1.12.1",
+    "pug-cli": "^1.0.0-alpha6"
+  }
+}
