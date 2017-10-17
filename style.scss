@@ -15,7 +15,9 @@ $vgreen: #001000;
 a {
 	text-decoration: none;
 }
-
+* {
+    border: 1px solid blue;
+}
 body {
     background-color: black;
     background: linear-gradient(to top right, black, $vblue, black, $vred, black, $vgreen, black);
@@ -33,11 +35,12 @@ h1 {
     text-shadow: 2px 2px black;
 }
 
-table {
-    margin: 0 auto;
-}
-
 .twitch {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    flex: auto;
+
 	a:link {
 		color: $whgreen;
 	}
@@ -56,6 +59,10 @@ table {
         padding: 5px;
         text-align: center;
     }
+}
+
+.row {
+    flex-direction: row !important;
 }
 
 .you {

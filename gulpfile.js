@@ -13,9 +13,9 @@ gulp.task('imagemin', () => {
 });
 
 gulp.task('sass', () => {
-    sass('src/stylesheets/style.scss')
+    sass('./style.scss')
         .on('error', sass.logError)
-        .pipe(gulp.dest('build/stylesheets/'));
+        .pipe(gulp.dest('./'));
 });
 
 gulp.task('build-js', () => {
@@ -40,7 +40,7 @@ gulp.task('build-routes', () => {
         .pipe(gulp.dest('build/routes/'));
 });
 
-gulp.watch('src/stylesheets/*', ['sass']);
+gulp.watch('./style.scss', ['sass']);
 gulp.watch('src/images/*', ['imagemin']);
 gulp.watch('src/scripts/**/*', ['build-js'])
 

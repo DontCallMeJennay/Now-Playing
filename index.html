@@ -22,8 +22,7 @@
         </span>
     </header>
     <hr />
-
-    <section id='yList'>
+    <section>
         <button class='btn-filter' id="authorize-button" style="display: none;">Authorize</button>
         <button class='btn-filter' id="signout-button" style="display: none;">Sign Out</button>
         </h2>
@@ -32,10 +31,18 @@
             </tbody>
         </table>
     </section>
-    
     <main id="vue-app">
-        <section class='twitch' id='tList' v-for='item in twitchResults'>
-            <tw-result :name='item.name' :logo='item.logo' :chan='item.chan' :url='item.url' :game='item.game' :status='item.status'></tw-result>
+        <section class='twitch' id='tList'>
+                <div v-for='item in twitchResults'>
+                    <tw-result :name='item.name' :logo='item.logo' :chan='item.chan' :url='item.url' :game='item.game' :status='item.status'>
+                    </tw-result>
+                </div>
+        </section>
+        <section id='yList'>
+            <div v-for='item in tubeResults'>
+                <yt-result>
+                </yt-result>
+            </div>
         </section>
     </main>
     <footer>

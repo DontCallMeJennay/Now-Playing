@@ -1,6 +1,11 @@
 Vue.component('tw-result', {
-    template: `<tr><td><img :src='logo' :alt='chan + " stream logo"'></td><td> {{ name }} </td><td class='names'><a :href='url'> {{ chan }} </a></td>
-<td> {{ game }} </td> <td class='sm-hide'> <a :href='url'> {{ status }} </a></td></tr>`,
+    template:  `<div class='row'>
+                <img :src='logo' :alt='chan + " stream logo"'>
+                <span> {{ name }} </span>
+                <span class='names'><a :href='url'> {{ chan }} </a></span>
+                <span> {{ game }} </span> 
+                <span class='sm-hide'> <a :href='url'> {{ status }} </a></span>
+                </div>`,
     props: ['name', 'logo', 'chan', 'url', 'game', 'status']
 })
 
@@ -15,7 +20,7 @@ var vm = new Vue({
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: `https://api.twitch.tv/kraken/users/${user}/follows/channels?limit=100`,
+                url: `https://api.twitch.tv/kraken/users/${user}/follows/channels?limit=25&sortby=last_broadcast`,
                 headers: { 'Client-ID': 'kjuxb8d6m4k8sek7vqnfvr3y1694077' },
                 success: (res) => {
                     var len = res.follows.length;
@@ -23,7 +28,7 @@ var vm = new Vue({
                         this.seeWhosLive(res.follows[i].channel.name.toString());
                     }
                 }                
-            }).then(() => { $('#games').css({'color': '#F0F'}) });
+            }).then(() => { $('#games').css({'color': '#909'}) });
         },
 
         seeWhosLive: function(name) {

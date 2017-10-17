@@ -26,7 +26,7 @@ table {
   color: #D6DC76; }
 .twitch a:visited {
   color: #ACB342; }
-.twitch td {
+.twitch tr > td {
   background-color: #4B367C;
   background: linear-gradient(to bottom, #5c478d, #4B367C);
   border: 1px inset #4B367C;
