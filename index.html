@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="etf-8">
+    <meta charset="utf-8">
     <title>Entertainment Dashboard</title>
     <meta name="description" content="Media account aggregator">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
     <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Exo+2:400,800|Libre+Baskerville:400,400italic|Poller+One:400'>
     <script src="https://use.fontawesome.com/59c976fd61.js"></script>
-    <link rel="stylesheet" href="build/stylesheets/style.css">
+    <script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -21,19 +22,20 @@
         </span>
     </header>
     <hr />
-    <main>
-        <section id='tList'>
-            <table class='twitch'>
-            </table>
-        </section>
-        <section id='yList'>
-            <button class='btn-filter' id="authorize-button" style="display: none;">Authorize</button>
-            <button class='btn-filter' id="signout-button" style="display: none;">Sign Out</button>
-            </h2>
-            <table class='you'>
-                <tbody id='yt'>
-                </tbody>
-            </table>
+
+    <section id='yList'>
+        <button class='btn-filter' id="authorize-button" style="display: none;">Authorize</button>
+        <button class='btn-filter' id="signout-button" style="display: none;">Sign Out</button>
+        </h2>
+        <table class='you'>
+            <tbody id='yt'>
+            </tbody>
+        </table>
+    </section>
+    
+    <main id="vue-app">
+        <section class='twitch' id='tList' v-for='item in twitchResults'>
+            <tw-result :name='item.name' :logo='item.logo' :chan='item.chan' :url='item.url' :game='item.game' :status='item.status'></tw-result>
         </section>
     </main>
     <footer>
@@ -41,7 +43,8 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
-    <script src="build/scripts/main.js"></script>
+    <script src="index.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>
