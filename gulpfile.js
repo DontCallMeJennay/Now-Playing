@@ -15,7 +15,7 @@ gulp.task('imagemin', () => {
 gulp.task('sass', () => {
     sass('./style.scss')
         .on('error', sass.logError)
-        .pipe(gulp.dest('./'));
+        .pipe(gulp.dest('public/'));
 });
 
 gulp.task('build-js', () => {
@@ -41,8 +41,6 @@ gulp.task('build-routes', () => {
 });
 
 gulp.watch('./style.scss', ['sass']);
-gulp.watch('src/images/*', ['imagemin']);
-gulp.watch('src/scripts/**/*', ['build-js'])
 
 
-gulp.task('default', ['sass', 'imagemin', 'build-js', 'build-routes']);
+gulp.task('default', ['sass']);

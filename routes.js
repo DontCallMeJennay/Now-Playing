@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var https = require('https');
 var request = require('request');
+
 var KEY_T = process.env.KEY_T;
 var KEY_Y = process.env.KEY_Y;
 
@@ -31,7 +32,7 @@ router.get('/streams', function(req, res, next) {
     }
     request(options, function(err, resp, body) {
         if (err) next(err);
-        console.log(resp.follows);
+        console.log(resp.body.follows);
         //var len = resp.follows.length;
         for (let i = 0; i < 5; i++) {
             //this.seeWhosLive(resp.follows[i].channel.name.toString());
