@@ -7,51 +7,50 @@
     <meta name="description" content="Media account aggregator">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
-    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Exo+2:400,800|Libre+Baskerville:400,400italic|Poller+One:400'>
+    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Exo+2:400,800|Libre+Baskerville:400,400italic|Poller+One:400">
     <script src="https://use.fontawesome.com/59c976fd61.js"></script>
     <script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/public/style.css">
 </head>
 
 <body>
     <header>
         <h1>Now Playing!</h1>
         <span>
-        <button id='games'><i class="fa fa-2x fa-twitch" aria-hidden="true"></i></button>
-        <button id='videos'><i class="fa fa-2x fa-youtube-play" aria-hidden="true"></i></button>
+        <button id="games"><i class="fa fa-2x fa-twitch" aria-hidden="true"></i></button>
+        <button id="videos"><i class="fa fa-2x fa-youtube-play" aria-hidden="true"></i></button>
         </span>
     </header>
     <hr />
-    <section>
-        <button class='btn-filter' id="authorize-button" style="display: none;">Authorize</button>
-        <button class='btn-filter' id="signout-button" style="display: none;">Sign Out</button>
-        </h2>
-        <table class='you'>
-            <tbody id='yt'>
-            </tbody>
-        </table>
+
+  <section>
+        <button class="btn-filter" id="authorize-button" style="display: none;">Authorize</button>
+        <button class="btn-filter" id="signout-button" style="display: none;">Sign Out</button>
     </section>
+  
     <main id="vue-app">
-        <section class='twitch' id='tList'>
-                <div v-for='item in twitchResults'>
-                    <tw-result :name='item.name' :logo='item.logo' :chan='item.chan' :url='item.url' :game='item.game' :status='item.status'>
+      
+        <section class="twitch" id="tList">
+                <div v-for="item in twitchResults">
+                    <tw-result :name="item.name" :logo="item.logo" :chan="item.chan" :url="item.url" :game="item.game" :status="item.status">
                     </tw-result>
                 </div>
         </section>
-        <section id='yList'>
-            <div v-for='item in tubeResults'>
-                <yt-result>
+      
+        <section id="yList">
+            <div v-for="item in ytResults">
+                <yt-result :name="item.name" :logo="item.id" :count="item.count" :descr="item.descr" :icon="item.icon">
                 </yt-result>
             </div>
         </section>
+      
     </main>
     <footer>
     </footer>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
-    <script src="index.js"></script>
-    <script src="app.js"></script>
+    <script src="/public/client.js"></script>
 </body>
 
 </html>
