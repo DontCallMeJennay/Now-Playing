@@ -28,11 +28,14 @@ var vm = new Vue({
     },
     methods: {
         getStreamList: function(user) {
+            let follows = "";
             $.get("/streams", (data) => {
-              this.twitchResults = data;
+              follows = data;
             }).then(() => {               
               console.log('GET twitchResults: ', this.twitchResults);
-              $('#games').css({'color': '#909'}) 
+              
+            }).then(() => {
+                $('#games').css({'color': '#909'}) 
             });
         }
     },
