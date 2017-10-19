@@ -28,22 +28,17 @@ var vm = new Vue({
     },
     methods: {
         getStreamList: function(user) {
-          console.log("getStreamList() fired");
             $.get("/streams", (data) => {
               this.twitchResults = data;
             }).then(() => {               
-              console.log('twitchResults: ', this.twitchResults);
+              console.log('GET twitchResults: ', this.twitchResults);
               $('#games').css({'color': '#909'}) 
             });
-        },
-
-        seeWhosLive: function(name) {            
-        
         }
     },
     mounted() {
         console.log('Ready!');
-        console.log('twitchResults: ', this.twitchResults);
+        console.log('Starting twitchResults: ', this.twitchResults);
       this.getStreamList();
     }
 })

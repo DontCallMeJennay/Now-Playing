@@ -1,10 +1,9 @@
 var express = require('express');
-var router = express.Router();
+var bodyParser = require('body-parser');
 var https = require('https');
 var request = require('request');
-var bodyParser = require('body-parser');
-var jsonParser = bodyParser.json();
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
+var rp = require('request-promise');
+var router = express.Router();
 
 var KEY_T = process.env.KEY_T;
 var KEY_Y = process.env.KEY_Y;
@@ -15,35 +14,39 @@ router.get("/", function(request, response) {
     response.sendFile(__dirname + '/public/index.html');
 });
 
+function seeWhosLive(data) {
+    let len = data._total;
+    let live = [];
+    for (var i = 0; i < 3; i++) {
+        let name = data.follows[i].channel.name;
+        let options = {
+            uri: "https://api.twitch.tv/kraken/streams/" + name,
+            headers: { 'Client-ID': KEY_T },
+            json: true
+        }
+        rp(options, function(err, res, body) {
+            if (err) next(err);
+            body.stream ? live.push(body.stream.channel) : live.push(`user ${name} is offline`);
+        });
+    }
+}
+
 router.get('/streams', function(req, res, next) {
     //let user = req.params.user;
     let options = {
-        url: "https://api.twitch.tv/kraken/users/silverrain64/follows/channels?limit=5&sortby=last_broadcast",
-        headers: { 'Client-ID': KEY_T }
+        uri: "https://api.twitch.tv/kraken/users/silverrain64/follows/channels?limit=5&sortby=last_broadcast",
+        headers: { 'Client-ID': KEY_T },
+        json: true
     }
-    request(options, function(err, resp, body) {
-        if (err) next(err);
-        body = JSON.parse(body);
-        var len = body._total;
-        for (let i = 0; i < 3; i++) {
-            seeWhosLive(body.follows[i].channel.name.toString());
-        }
-        res.send(T_DATA);
+    rp(options)
+        .then((body) => {
+            seeWhosLive(body);
+            }).then((data) => {
+                res.send(data);
+        }).catch((err) => {
+        next(err);        
     });
 });
-
-function seeWhosLive(name) {
-    console.log('seeWhosLive() fired');
-    let options = {
-        url: "https://api.twitch.tv/kraken/streams/" + name,
-        headers: { 'Client-ID': KEY_T }
-    }
-    request(options, function(err, res, body) {
-        if (err) next(err);
-        body = JSON.parse(body);
-        body.stream ? T_DATA.push(body.stream.channel) : T_DATA.push("user " + name + " is offline");      
-    });
-}
 
 /*
 router.get('/videos', function(req, res, next) {
