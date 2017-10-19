@@ -31,7 +31,6 @@ var vm = new Vue({
           console.log("getStreamList() fired");
             $.get("/streams", (data) => {
               this.twitchResults = data;
-              //seeWhosLive(data);
             }).then(() => {               
               console.log('twitchResults: ', this.twitchResults);
               $('#games').css({'color': '#909'}) 
@@ -45,7 +44,7 @@ var vm = new Vue({
     mounted() {
         console.log('Ready!');
         console.log('twitchResults: ', this.twitchResults);
-      //this.getStreamList();
+      this.getStreamList();
     }
 })
 

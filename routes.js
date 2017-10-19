@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var https = require('https');
 var request = require('request');
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 var KEY_T = process.env.KEY_T;
 var KEY_Y = process.env.KEY_Y;
@@ -12,18 +15,6 @@ router.get("/", function(request, response) {
     response.sendFile(__dirname + '/public/index.html');
 });
 
-function seeWhosLive(name) {
-    console.log('seeWhosLive() fired');
-    let options = {
-        url: "https://api.twitch.tv/kraken/streams/" + name,
-        headers: { 'Client-ID': KEY_T }
-    }
-    request(options, function(err, res, body) {
-        if (err) next(err);
-        res.stream ? tData.push(body.stream.channel) : T_DATA.push("user " + name + " is offline");
-    });
-}
-
 router.get('/streams', function(req, res, next) {
     //let user = req.params.user;
     let options = {
@@ -32,13 +23,27 @@ router.get('/streams', function(req, res, next) {
     }
     request(options, function(err, resp, body) {
         if (err) next(err);
-        console.log(resp.body.follows);
-        //var len = resp.follows.length;
-        for (let i = 0; i < 5; i++) {
-            //this.seeWhosLive(resp.follows[i].channel.name.toString());
-        }      
+        body = JSON.parse(body);
+        var len = body._total;
+        for (let i = 0; i < 3; i++) {
+            seeWhosLive(body.follows[i].channel.name.toString());
+        }
+        res.send(T_DATA);
     });
 });
+
+function seeWhosLive(name) {
+    console.log('seeWhosLive() fired');
+    let options = {
+        url: "https://api.twitch.tv/kraken/streams/" + name,
+        headers: { 'Client-ID': KEY_T }
+    }
+    request(options, function(err, res, body) {
+        if (err) next(err);
+        body = JSON.parse(body);
+        body.stream ? T_DATA.push(body.stream.channel) : T_DATA.push("user " + name + " is offline");      
+    });
+}
 
 /*
 router.get('/videos', function(req, res, next) {
