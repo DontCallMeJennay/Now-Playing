@@ -30,7 +30,7 @@ var vm = new Vue({
         getStreamList: function(user) {
             let follows = "";
             $.get("/streams", function(data) {
-              console.log(data);
+                console.log('getStreamList() return: ', data);
             });
         }
     },

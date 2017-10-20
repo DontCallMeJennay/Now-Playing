@@ -1,4 +1,5 @@
 var express = require('express');
+var async = require('async');
 var bodyParser = require('body-parser');
 var https = require('https');
 var request = require('request');
@@ -27,44 +28,39 @@ router.get('/streams', function(req, res, next) {
             resolve(body);
         });
     });
-    follows.then(function(body) {
-       var liveList = seeWhosLive(body);
-    }, function(err) {
-        console.error(err);
-    });
-    follows.then(function(liveList) {        
-        res.send(liveList);
-    }, function() {
-        console.error(err);
+    
+    Promise.resolve(follows).then((data) => {
+        res.send(data);
     });
 });
 
 function seeWhosLive(data) {
     let len = data._total;
     var liveList = new Promise((resolve, reject) => {
-        let live = [];
         for (var i = 0; i < 3; i++) {
-            let name = data.follows[i].channel.name;
-            let options = {
-                uri: "https://api.twitch.tv/kraken/streams/" + name,
-                headers: { 'Client-ID': KEY_T },
-                json: true
-            }
-            rp(options, function(err, res, body) {
-                if (err) next(err);
-                body.stream ? live.push(body.stream.channel) : live.push(`user ${name} is offline`);
+            let x = new Promise((resolve, reject) => {
+                console.log('loop promise made: ', i);
+                let name = data.follows[i].channel.name;
+                let options = {
+                    uri: "https://api.twitch.tv/kraken/streams/" + name,
+                    headers: { 'Client-ID': KEY_T },
+                    json: true
+                }
+                rp(options, function(err, res, body) {
+                    if (err) next(err);
+                    body.stream ? live.push(body.stream.channel) : live.push(`user ${name} is offline`);
+                });
             });
         }
-        resolve(live);
+        console.log('loop finished');
+        resolve(liveList);
     });
-    liveList.then(function(list) {
-        console.log('Promise.all: ', list);
-        return list;
-    }, function(err) {
-        console.error(err);
+    var reply = Promise.resolve(liveList);
+    console.log("Reply: ", reply)
+    reply.then(() => {
+        console.log('Second promise: ', liveList);
     });
 }
-
 
 /*
 router.get('/videos', function(req, res, next) {
