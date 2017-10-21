@@ -20,7 +20,7 @@ router.get('/streams', function(req, res, next) {
     T_DATA = [];
     var follows = new Promise((resolve, reject) => {
         let options = {
-            uri: "https://api.twitch.tv/kraken/users/silverrain64/follows/channels?limit=5&sortby=last_broadcast",
+            uri: "https://api.twitch.tv/kraken/users/silverrain64/follows/channels?limit=20&sortby=last_broadcast",
             headers: { 'Client-ID': KEY_T },
             json: true
         }
@@ -32,7 +32,7 @@ router.get('/streams', function(req, res, next) {
 
     Promise.resolve(follows).then((data) => {
         var whosLive = new Promise((resolve, reject) => {
-            for (var i = 0; i < 3; i++) {
+            for (var i = 0; i < 20; i++) {
                 let name = data.follows[i].channel.name;
                 let x = makePromise(name);
                 T_DATA.push(x);
@@ -56,7 +56,16 @@ function makePromise(name) {
         }
         rp(options, function(err, res, body) {
             if (err) next(err);
-            body.stream ? resolve(body.stream) : resolve(`user ${name} is offline`);
+            if (body.stream) {
+                resolve(body.stream.channel);
+            } else {
+                let offline = {
+                    "display_name": name,
+                    "logo": "/public/offline.png",
+                    "status": "stream offline"
+                }
+                resolve(offline);
+            };
         });
     });
 }

@@ -1,9 +1,6 @@
 a {
   text-decoration: none; }
 
-* {
-  border: 1px solid blue; }
-
 body {
   background-color: black;
   background: linear-gradient(to top right, black, #000010, black, #100000, black, #001000, black);
@@ -31,15 +28,13 @@ h1 {
     color: #D6DC76; }
   .twitch a:visited {
     color: #ACB342; }
-  .twitch tr > td {
-    background-color: #4B367C;
-    background: linear-gradient(to bottom, #5c478d, #4B367C);
-    border: 1px inset #4B367C;
-    color: #F7FCB0;
-    padding: 5px;
-    text-align: center; }
+
+td {
+  background: linear-gradient(to bottom, rgba(175, 175, 175, 0), rgba(175, 175, 175, 0.1));
+  padding: 0 10px; }
 
 .row {
+  border: 1px solid white;
   flex-direction: row !important; }
 
 .you td:not(.red) {
@@ -76,9 +71,9 @@ section {
 
 img {
   border-radius: 50px;
-  height: 3em;
+  height: 2em;
   margin: 5px;
-  width: 3em; }
+  width: 2em; }
 
 footer {
   margin: 1% auto;

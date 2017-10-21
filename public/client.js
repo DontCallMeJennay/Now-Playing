@@ -1,18 +1,16 @@
 Vue.component("tw-result", {
-    template:  `<div class="row">
-                <img :src="logo" :alt="chan + ' stream logo'">
-                <span> {{ name }} </span>
-                <span class="names"><a :href="url"> {{ chan }} </a></span>
-                <span> {{ game }} </span> 
-                <span class="sm-hide"> <a :href="url"> {{ status }} </a></span>
-                </div>`,
+    template:  `<tr>
+                <td><img :src="logo" :alt="name + ' stream logo'"></td>
+                <td class="names"><a :href="url"> {{ name }} </a></td>
+                <td class="game"> {{ game }} </span> 
+                <td> <a :href="url"> {{ status }} </a></td>
+                </tr>`,
     props: ["name", "logo", "chan", "url", "game", "status"]
 })
 
 Vue.component("yt-result", {
     template:  `<div class="row">
                 <img :src="logo" :alt="chan + ' stream logo'">
-                <span> {{ name }} </span>
                 <span class='names'><a :href='url'> {{ chan }} </a></span>
                 <span> {{ game }} </span> 
                 <span class='sm-hide'> <a :href='url'> {{ status }} </a></span>
@@ -23,7 +21,14 @@ Vue.component("yt-result", {
 var vm = new Vue({
     el: "#vue-app",
     data: {
-        twitchResults: [],
+        twitchResults: [{
+            "display_name": "silverrain64",
+            "logo": './raincloud.png',
+            "chan": "silverrain64",
+            "url": "https://twitch.tv/silverrain64",
+            "game": "Super Mario World",
+            "status": "Testing a web app"
+        }],
         ytResults: []
     },
     methods: {
@@ -31,12 +36,16 @@ var vm = new Vue({
             let follows = "";
             $.get("/streams", function(data) {
                 console.log('getStreamList() return: ', data);
+            }).then((data) => {
+                this.setStreamList(data);
+                $("#games").css({"color": "#4B367C"});
             });
+        },
+        setStreamList: function(data) {
+            this.twitchResults = data;
         }
     },
     mounted() {
-        console.log('Ready!');
-        console.log('Starting twitchResults: ', this.twitchResults);
       this.getStreamList();
     }
 })
