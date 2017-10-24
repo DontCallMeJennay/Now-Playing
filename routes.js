@@ -8,14 +8,44 @@ var router = express.Router();
 
 var KEY_T = process.env.KEY_T;
 var KEY_Y = process.env.KEY_Y;
+var SECRET_T = process.env.SECRET_T;
+var HOST_URL = "http://localhost/oauth";
 
 var T_DATA = [];
+var tCode = "";
 
 router.get("/", function(request, response) {
     response.sendFile(__dirname + '/public/index.html');
 });
 
+/* I'm not sure I actually need this...
 
+router.get("/auth", function(request, response) {
+    let uri = `https://api.twitch.tv/kraken/oauth2/authorize
+    ?client_id=${KEY_T}
+    &redirect_uri=${HOST_URL}
+    &response_type=token&scope=user_read`;
+    rp(uri, (err, res, body) => {
+        if(err) console.error(res.statusText);
+        //
+    }).then(function(res) {
+        res.send(res);
+    });
+});
+
+router.post("/auth", function(request, response) {
+    let uri= `https://api.twitch.tv/kraken/oauth2/token
+    ?client_id=${KEY_T}
+    &client_secret=${SECRET_T}
+    &code=${tCode}
+    &grant_type=authorization_code
+    &redirect_uri=${HOST_URL}`
+    rp(uri, (err, res, body) => {
+        if(err) console.error(res.statusText);
+
+    });
+})
+*/
 
 router.get('/streams', function(req, res, next) {
     //let user = req.params.user;

@@ -52,9 +52,11 @@ var vm = new Vue({
 
 $("document").ready(function() {
     $("#twitch-auth").show()
-        .on("click", () => {
-            $.get("/auth", function(res) {
-                console.log(res);
+        .on("click", function() {
+            console.log("#twitch-auth clicked");
+            let uri = `https://api.twitch.tv/kraken/oauth2/authorize?client_id=kjuxb8d6m4k8sek7vqnfvr3y1694077&redirect_uri=http://localhost/oauth&response_type=token&scope=user_read&force_verify=true`;
+            $.get(uri, function(data) {
+                console.log("#twitch-auth GET returned");
             });
         });
 
