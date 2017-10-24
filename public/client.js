@@ -1,5 +1,5 @@
 Vue.component("tw-result", {
-    template:  `<tr>
+    template: `<tr>
                 <td><img :src="logo" :alt="name + ' stream logo'"></td>
                 <td class="names"><a :href="url"> {{ name }} </a></td>
                 <td class="game"> {{ game }} </span> 
@@ -9,7 +9,7 @@ Vue.component("tw-result", {
 })
 
 Vue.component("yt-result", {
-    template:  `<div class="row">
+    template: `<div class="row">
                 <img :src="logo" :alt="chan + ' stream logo'">
                 <span class='names'><a :href='url'> {{ chan }} </a></span>
                 <span> {{ game }} </span> 
@@ -23,7 +23,7 @@ var vm = new Vue({
     data: {
         twitchResults: [{
             "display_name": "silverrain64",
-            "logo": './raincloud.png',
+            "logo": "/public/raincloud.png",
             "chan": "silverrain64",
             "url": "https://twitch.tv/silverrain64",
             "game": "Super Mario World",
@@ -38,7 +38,7 @@ var vm = new Vue({
                 console.log('getStreamList() return: ', data);
             }).then((data) => {
                 this.setStreamList(data);
-                $("#games").css({"color": "#4B367C"});
+                $("#games").css({ "color": "#4B367C" });
             });
         },
         setStreamList: function(data) {
@@ -46,13 +46,17 @@ var vm = new Vue({
         }
     },
     mounted() {
-      this.getStreamList();
+        this.getStreamList();
     }
 })
 
 $("document").ready(function() {
-
-    $("#tList, #yList").hide();
+    $("#twitch-auth").show()
+        .on("click", () => {
+            $.get("/auth", function(res) {
+                console.log(res);
+            });
+        });
 
     $('#games').on('click', function() {
         $('#tList').slideToggle(500);

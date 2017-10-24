@@ -15,6 +15,8 @@ router.get("/", function(request, response) {
     response.sendFile(__dirname + '/public/index.html');
 });
 
+
+
 router.get('/streams', function(req, res, next) {
     //let user = req.params.user;
     T_DATA = [];
