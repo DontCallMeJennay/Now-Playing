@@ -3,15 +3,12 @@ $gold: #B59243;
 $whgreen: #F7FCB0;
 $ltgreen: #D6DC76;
 $green: #ACB342;
-
 $dkteal: #005D5D;
 $teal: #007777;
 $ltteal: #009999;
-
 $vblue: #000010;
 $vred: #100000;
 $vgreen: #001000;
-
 a {
     text-decoration: none;
 }
@@ -38,7 +35,6 @@ h1 {
     flex-direction: column;
     margin: 0 auto;
     flex: auto;
-
     a:link {
         color: $whgreen;
     }
@@ -146,6 +142,10 @@ button:focus {
     color: black;
 }
 
+.hidden {
+    display: none;
+}
+
 @media screen and (max-width: 800px) {
     body {
         margin: 2%;
@@ -162,7 +162,6 @@ button:focus {
     body {
         font-size: 0.75rem;
     }
-
     img {
         height: 2em;
         margin: auto;

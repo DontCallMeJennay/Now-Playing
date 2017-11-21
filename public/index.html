@@ -31,19 +31,31 @@
     <main id="vue-app">
         <section class="twitch" id="tList">
             <table>
-                <thead></thead>
+                <caption class="hidden" aria-hidden="false">Twitch Stream List</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Channel</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Playing</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                </thead>
                 <tbody>
                     <template v-for="item in twitchResults">
-                        <tw-result :name="item.display_name" :logo="item.logo" :url="item.url" :game="item.game" :status="item.status">
-                        </tw-result>
-                    </template>
+                        <content-result 
+                            :name="item.display_name" 
+                            :logo="item.logo" 
+                            :url="item.url" 
+                            :game="item.game" 
+                            :status="item.status">
+                        </content-result>
                     </template>
             </table>
         </section>
         <section id="yList">
             <div v-for="item in ytResults">
-                <yt-result :name="item.name" :logo="item.id" :count="item.count" :descr="item.descr" :icon="item.icon">
-                </yt-result>
+                <content-result :name="item.name" :logo="item.id" :count="item.count" :descr="item.descr" :icon="item.icon">
+                </content-result>
             </div>
         </section>
     </main>

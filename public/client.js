@@ -1,21 +1,37 @@
-Vue.component("tw-result", {
-    template: `<tr>
-                <td><img :src="logo" :alt="name + ' stream logo'"></td>
-                <td class="names"><a :href="url"> {{ name }} </a></td>
-                <td class="game"> {{ game }} </span> 
-                <td> <a :href="url"> {{ status }} </a></td>
-                </tr>`,
-    props: ["name", "logo", "chan", "url", "game", "status"]
+
+Vue.component("content-result", {
+    props: ["name", "logo", "chan", "url", "game", "status"],
+    template:  `<tr class="row">
+                <td></td><img :src="logo" :alt="chan + ' stream logo'"></td>
+                <td><span> {{ name }} </span></td>
+                <td><span class="names"><a :href="url"> {{ chan }} </a></span></td>
+                <td><span> {{ game }} </span> </td>
+                <td><span class="sm-hide"> <a :href="url"> {{ status }} </a></span></td>
+                </tr>`    
 })
 
-Vue.component("yt-result", {
-    template: `<div class="row">
-                <img :src="logo" :alt="chan + ' stream logo'">
-                <span class='names'><a :href='url'> {{ chan }} </a></span>
-                <span> {{ game }} </span> 
-                <span class='sm-hide'> <a :href='url'> {{ status }} </a></span>
-                </div>`,
-    props: ["name", "id", "count", "descr", "icon"]
+Vue.component("content-list", {
+    props: ["content-title", "content-data", "content-type"],
+    template: `
+        <div class="content">
+            <table>
+            <caption aria-hidden="false">{{content-title}}</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Channel</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">{{props.content-type}}</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template v-for="each in content-data">
+                        <content-result></content-result>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    `
 })
 
 var vm = new Vue({

@@ -105,6 +105,9 @@ button:focus {
   background: radial-gradient(#e8c576, #B59243);
   color: black; }
 
+.hidden {
+  display: none; }
+
 @media screen and (max-width: 800px) {
   body {
     margin: 2%; }
