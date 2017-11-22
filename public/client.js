@@ -1,9 +1,9 @@
-Vue.component("content-list", {
+Vue.component("twitch-list", {
     props: ["content-title", "content-data", "content-type"],
     template: `
         <div class="content">
             <table>
-            <caption aria-hidden="false">{{contentTitle}}</caption>
+            <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead>
                     <tr>
                         <th scope="col">Channel</th>
@@ -12,32 +12,91 @@ Vue.component("content-list", {
                         <th scope="col">Description</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody>                    
                     <template v-for="item in contentData">
-                        <content-result
-                            :chan="item.channel"
+                        <twitch-result
                             :game="item.game"
                             :logo="item.logo"
                             :name="item.display_name"
                             :status="item.status"
                             :url="item.url"                                                       
-                        ></content-result>                        
-                    </template>
-                    <div></div>
+                        ></twitch-result> 
+                    </template>                       
                 </tbody>
             </table>
         </div>
     `
 })
 
-Vue.component("content-result", {
-    props: ["chan", "game", "logo", "name", "newItems", "status", "url"],
+Vue.component("youtube-list", {
+    props: {
+        contentTitle: String,
+        contentData: Array,
+        contentType: String
+    },
+    methods: {
+        snip: function(string) {
+            if (string.length > 100) { return string.substr(0,200) + "..."; }
+            else { return string; }
+        }
+    },
+    template: `
+        <div class="content">
+            <table>
+                <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Channel</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody>   
+                <template v-for="item in contentData">
+                    <template v-if="item.snippet.description && item.contentDetails.newItemCount > 0">
+                        <youtube-result
+                            :desc="snip(item.snippet.description)" 
+                            :logo="item.snippet.thumbnails.default.url" 
+                            :name="item.snippet.title" 
+                            :newItem="item.contentDetails.newItemCount"                                                                               
+                            url="https://www.youtube.com"                                                       
+                        ></youtube-result> 
+                    </template>
+                </template>            
+                </tbody>
+            </table>
+        </div>
+            `
+})
+
+Vue.component("twitch-result", {
+    props: ["game", "logo", "name", "status", "url"],   //All strings
     template: `<tr class="row">
-                <th scope="row"><img :src="logo" :alt="chan + ' stream logo'"></th>
-                <td><span> {{name }} </span></td>
-                <td><span class="names"><a :href="url"> {{ chan }} </a></span></td>
+                <th scope="row"><img :src="logo" :alt="name + ' stream logo'"></th>
+                <td><span class="names"><a :href="url"> {{ name }} </a></span></td>
                 <td><span> {{ game }} </span> </td>
                 <td><span class="sm-hide"> <a :href="url"> {{ status }} </a></span></td>
+                </tr>`,
+})
+
+Vue.component("youtube-result", {
+    props: {
+        desc: {
+            type: String,
+            default: "No description given"
+        },
+        logo: String,
+        name: String,
+        newItem: {
+            type: [Number, String],
+            default: 0
+        },
+        url: String
+    },
+    template: `<tr class="row">
+                <th scope="row"><img :src="logo" :alt="name + ' channel logo'"><span> {{newItem}} </span></th>
+                <td><span class="names"><a :href="url"> {{ name }} </a></span></td>
+                <td><span class="sm-hide"> <a :href="url"> {{ desc }} </a></span></td>
                 </tr>`,
 
 })
@@ -45,22 +104,11 @@ Vue.component("content-result", {
 var vm = new Vue({
     el: "#vue-app",
     data: {
-        twitchProps: ["chan", "game", "logo", "name", "status", "url"],
-        ytProps: ["desc", "logo", "name", "newItems", "url"],
         twitchResults: [{
-            "chan": "silverrain64",
-            "display_name": "silverrain64",
-            "logo": "/public/raincloud.png",
-            "game": "Super Mario World",                        
-            "status": "Testing a web app",
-            "url": "https://twitch.tv/silverrain64"
+
         }],
         ytResults: [{
-            "desc": "Making this up as I go",
-            "logo": "/public/raincloud.png",
-            "name": "silverrain64",                    
-            "newItems": 0,
-            "url": "https://jennicorbus.com"
+
         }]
     },
     methods: {
@@ -74,11 +122,12 @@ var vm = new Vue({
             });
         },
         setStreamList: function (data) {
+            data = data.filter((i) => i.status !=="stream offline");
             this.twitchResults = data;
         },
         setVideoList: function (data) {
             this.ytResults = data;
-            console.log(this.ytResults);
+            $("#videos").css({ "color": "red" });
         }
     },
     mounted() {
@@ -132,7 +181,7 @@ function initClient() {
 function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
         authorizeButton.style.display = 'none';
-        signoutButton.style.display = 'none';
+        signoutButton.style.display = 'block';
         getSubscriptions();
     } else {
         authorizeButton.style.display = 'block';
