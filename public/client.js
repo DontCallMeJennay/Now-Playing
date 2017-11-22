@@ -111,6 +111,21 @@ var vm = new Vue({
         }]
     },
     methods: {
+        twitchAuth: function () {
+            let endPoint = "https://api.twitch.tv/kraken/oauth2/authorize",
+                client_id = "kjuxb8d6m4k8sek7vqnfvr3y1694077",
+                redirect_uri = "http://localhost/auth/",
+                response_type = "token",
+                scope = "user_read";
+            $.ajax({
+                type: "GET",
+                dataType: "JSON",
+                url: `${endPoint}?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=${response_type}&scope=${scope}&callback=?`,
+                success: function(data) { console.log(data); },
+                fail: function(data) { console.log(data); },
+                done: function(data) { console.log("Done! ", data); },        
+            })
+        },
         getStreamList: function (user) {
             let follows = "";
             $.get("/streams", function (data) {
