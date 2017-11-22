@@ -15,14 +15,15 @@ Vue.component("content-list", {
                 <tbody>
                     <template v-for="item in contentData">
                         <content-result
-                            :logo="contentData.logo"
-                            :name="contentData.display_name"
-                            :chan="contentData.channel"
-                            :url="contentData.url"
-                            :game="contentData.game"
-                            :status="contentData.status"
-                        ></content-result>
+                            :logo="item.logo"
+                            :name="item.display_name"
+                            :chan="item.channel"
+                            :url="item.url"
+                            :game="item.game"
+                            :status="item.status"
+                        ></content-result>                        
                     </template>
+                    <div></div>
                 </tbody>
             </table>
         </div>
@@ -32,7 +33,7 @@ Vue.component("content-list", {
 Vue.component("content-result", {
     props: ["logo", "name", "chan", "url", "game", "status"], 
     template:  `<tr class="row">
-                <td><img :src="logo" :alt="chan + ' stream logo'"></td>
+                <th scope="row"><img :src="logo" :alt="chan + ' stream logo'"></th>
                 <td><span> {{name }} </span></td>
                 <td><span class="names"><a :href="url"> {{ chan }} </a></span></td>
                 <td><span> {{ game }} </span> </td>
