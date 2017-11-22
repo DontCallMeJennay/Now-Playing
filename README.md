@@ -32,8 +32,9 @@ This project was inspired by the [freeCodeCamp](https://freecodecamp.com) API pr
  * (?) Research service workers, progressive web apps, or whatever it is that causes notifications on smartphones and in Windows 10.
 
 ## Next steps
-* *Rewrite previous project's view as Vue components* In progress
-* *Rewrite previous project's AJAX code into Express* Twitch completed, YouTube next
-* ~~Figure out how to handle asynchronous updating with Vue.~~
-* Get a working product going with two services
+* ~~Rewrite previous project's view as Vue components~~
+* ~~Rewrite previous project's AJAX code into Express~~ Completed, but I'm reviewing whether server-side requests are actually necessary
+* ~~Figure out how to handle asynchronous updating with Vue~~
+* ~~Get a working product going with two services~~
+* Set up OAuth and modify GETs so any user can access their stuff
 * Research and add 1-3 more services
