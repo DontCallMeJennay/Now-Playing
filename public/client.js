@@ -8,7 +8,7 @@ Vue.component("twitch-list", {
                     <tr>
                         <th scope="col">Channel</th>
                         <th scope="col">Name</th>
-                        <th scope="col">{{contentType}}</th>
+                        <th scope="col">Game</th>
                         <th scope="col">Description</th>
                     </tr>
                 </thead>
@@ -35,8 +35,8 @@ Vue.component("youtube-list", {
         contentType: String
     },
     methods: {
-        snip: function(string) {
-            if (string.length > 100) { return string.substr(0,200) + "..."; }
+        snip: function (string) {
+            if (string.length > 100) { return string.substr(0, 200) + "..."; }
             else { return string; }
         }
     },
@@ -98,7 +98,6 @@ Vue.component("youtube-result", {
                 <td><span class="names"><a :href="url"> {{ name }} </a></span></td>
                 <td><span class="sm-hide"> <a :href="url"> {{ desc }} </a></span></td>
                 </tr>`,
-
 })
 
 var vm = new Vue({
@@ -115,19 +114,24 @@ var vm = new Vue({
         getStreamList: function (user) {
             let follows = "";
             $.get("/streams", function (data) {
-                console.log('getStreamList() return: ', data);
             }).then((data) => {
                 this.setStreamList(data);
                 $("#games").css({ "color": "#4B367C" });
             });
         },
         setStreamList: function (data) {
-            data = data.filter((i) => i.status !=="stream offline");
+            data = data.filter((i) => i.status !== "stream offline");
             this.twitchResults = data;
+        },
+        getVideoList: function (user) {
+            $.get("/videos", function (data) {
+            }).then((data) => {
+                this.setVideoList(data);
+                $("#videos").css({ "color": "red" });
+            });
         },
         setVideoList: function (data) {
             this.ytResults = data;
-            $("#videos").css({ "color": "red" });
         }
     },
     mounted() {
@@ -207,17 +211,7 @@ function getSubscriptions() {
     });
 }
 
-
 $("document").ready(function () {
-    $("#twitch-auth").show()
-        .on("click", function () {
-            console.log("#twitch-auth clicked");
-            let uri = `https://api.twitch.tv/kraken/oauth2/authorize?client_id=kjuxb8d6m4k8sek7vqnfvr3y1694077&redirect_uri=http://localhost/oauth&response_type=token&scope=user_read&force_verify=true`;
-            $.get(uri, function (data) {
-                console.log("#twitch-auth GET returned");
-            });
-        });
-
     $('#games').on('click', function () {
         $('#tList').slideToggle(500);
         $('#yList').slideUp(500);

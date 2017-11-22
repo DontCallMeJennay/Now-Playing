@@ -1,6 +1,7 @@
 require('dotenv').config();
 var express = require('express');
 var app = express();
+var path = require('path');
 var index = require('./routes');
 var bodyParser = require('body-parser');
 var favicon = require('serve-favicon');
