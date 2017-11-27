@@ -112,21 +112,26 @@ var vm = new Vue({
     },
     methods: {
         twitchAuth: function () {
-            let endPoint = "https://api.twitch.tv/kraken/oauth2/authorize",
-                client_id = "kjuxb8d6m4k8sek7vqnfvr3y1694077",
-                redirect_uri = "http://localhost/index.html",
-                response_type = "token",
-                scope = "user_read";
-            $.ajax({
-                type: "GET",
-                dataType: "html",
-                url: encodeURI(`${endPoint}?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=${response_type}&scope=${scope}`),
-                success: function(data) { 
-                    window.open().document.body.innerHTML += data;
-                },
-                fail: function(data) { console.log(data); },
-                done: function(data) { console.log("Done! ", data); },        
-            })
+            let endPoint = "https://api.twitch.tv/kraken/oauth2/authorize";
+            let params = {
+                "client_id": "kjuxb8d6m4k8sek7vqnfvr3y1694077",
+                "redirect_uri": "http://localhost/logged-in.html",
+                "response_type": "token",
+                "scope": "user_read"
+        }
+            const auth = document.createElement("form");
+            auth.setAttribute("method", "GET");
+            auth.setAttribute("action", endPoint);
+            auth.setAttribute("class", "hidden");
+            for (var i in params) {
+                let input = document.createElement("input");
+                input.setAttribute("type", "hidden");
+                input.setAttribute("name", i);
+                input.setAttribute("value", params[i]);
+                auth.appendChild(input);                
+            }
+            document.body.appendChild(auth);
+            auth.submit();
         },
         getStreamList: function (user) {
             let follows = "";
