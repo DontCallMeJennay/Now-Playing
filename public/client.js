@@ -53,7 +53,7 @@ Vue.component("youtube-list", {
             </thead>
             <tbody>   
                 <template v-for="item in contentData">
-                    <template v-if="item.snippet.description && item.contentDetails.newItemCount > 0">
+                    <template v-if="item.snippet && item.contentDetails.newItemCount > 0">
                         <youtube-result
                             :desc="snip(item.snippet.description)" 
                             :logo="item.snippet.thumbnails.default.url" 
@@ -114,15 +114,15 @@ var vm = new Vue({
         twitchAuth: function () {
             let endPoint = "https://api.twitch.tv/kraken/oauth2/authorize",
                 client_id = "kjuxb8d6m4k8sek7vqnfvr3y1694077",
-                redirect_uri = "http://localhost/auth/",
+                redirect_uri = "http://localhost/index.html",
                 response_type = "token",
                 scope = "user_read";
             $.ajax({
                 type: "GET",
                 dataType: "html",
-                url: `${endPoint}?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=${response_type}&scope=${scope}`,
+                url: encodeURI(`${endPoint}?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=${response_type}&scope=${scope}`),
                 success: function(data) { 
-                    console.log(data); 
+                    window.open().document.body.innerHTML += data;
                 },
                 fail: function(data) { console.log(data); },
                 done: function(data) { console.log("Done! ", data); },        
