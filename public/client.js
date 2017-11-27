@@ -119,9 +119,11 @@ var vm = new Vue({
                 scope = "user_read";
             $.ajax({
                 type: "GET",
-                dataType: "JSON",
-                url: `${endPoint}?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=${response_type}&scope=${scope}&callback=?`,
-                success: function(data) { console.log(data); },
+                dataType: "html",
+                url: `${endPoint}?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=${response_type}&scope=${scope}`,
+                success: function(data) { 
+                    console.log(data); 
+                },
                 fail: function(data) { console.log(data); },
                 done: function(data) { console.log("Done! ", data); },        
             })
