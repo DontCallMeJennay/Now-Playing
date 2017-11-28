@@ -91,28 +91,16 @@ footer {
 hr {}
 
 button {
-    background-color: black;
-    color: $gold;
-    border-radius: 50px;
     margin: auto;
     min-width: 10%;
     padding: 0.75em;
     line-height: 1;
 }
 
-button:focus {
-    outline: none;
-}
-
 .names {
     font-family: "Cabin", serif;
     font-size: 1.25em;
     padding: 0 5px;
-}
-
-.btn-lit {
-    background-color: $gold + #222;
-    color: black;
 }
 
 .hidden {

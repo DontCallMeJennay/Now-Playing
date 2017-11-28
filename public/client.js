@@ -12,6 +12,7 @@ Vue.component("twitch-list", {
                 user = document.getElementById("username").value.toLowerCase();
                 vm.getStreamList(user);
                 this.signedIn = true;
+                localStorage.setItem("twitchName", user);
             }
         },
         clearData: function () {
@@ -20,6 +21,14 @@ Vue.component("twitch-list", {
             this.clearTable("twitchResults");
         }
     },
+    mounted() {
+        let x = localStorage.getItem("twitchName");
+        console.log(x);
+        if (x) {
+            this.user = x;
+            this.getName();
+        };
+    },
     template: `
         <div class="content">
             <section v-if="this.signedIn === false">
@@ -27,7 +36,10 @@ Vue.component("twitch-list", {
                 <input type="text" v-model=user id="username"/>
                 <button class="btn-filter" id="twitch-auth" @click=getName()>Get follow list</button></button>
             </section>
-        <button v-if="this.signedIn === true" class="btn-filter" id="twitch-signout" style="display: block;" @click=clearData()>Sign Out T</button>
+            <section v-if="this.signedIn === true">
+                <span>Signed in as {{user}}</span>
+                <button class="btn-filter" id="twitch-signout" style="display: block;" @click=clearData()>Sign out of Twitch</button>
+            </section>
 
         <table v-if="this.signedIn === true">
             <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
@@ -59,19 +71,23 @@ Vue.component("youtube-list", {
     props: {
         contentTitle: String,
         contentData: Array,
-        contentType: String
+        contentType: String,
+        clearTable: Function
     },
     methods: {
         snip: function (string) {
             if (string.length > 100) { return string.substr(0, 200) + "..."; }
             else { return string; }
+        },
+        clearData: function () {
+            this.clearTable("ytResults");
         }
     },
     template: `
         <div class="content">
             <button class="btn-filter" id="authorize-button" style="display: block;">Authorize Y</button>
-            <button class="btn-filter" id="signout-button" style="display: block;">Sign Out Y</button>
-            <table v-if="this.contentData !== []">
+            <button class="btn-filter" id="signout-button" style="display: block;">Sign out of YouTube</button>
+            <table v-if="this.contentData.length > 0">
                 <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
             <thead>
                 <tr>
@@ -132,19 +148,15 @@ Vue.component("youtube-result", {
 var vm = new Vue({
     el: "#vue-app",
     data: {
-        twitchResults: [{
-
-        }],
-        ytResults: [{
-
-        }],
+        twitchResults: [],
+        ytResults: [],
         twitchName: ""
     },
     methods: {
         setUser: function (user) {
             this.twitchName = user;
         },
-        getStreamList: function (user) {            
+        getStreamList: function (user) {
             $.ajax({
                 type: "GET",
                 dataType: "json",
@@ -174,14 +186,10 @@ var vm = new Vue({
             this.twitchResults = data;
         },
         getVideoList: function (user) {
-            $.get("/videos", function (data) {
-            }).then((data) => {
-                this.setVideoList(data);       
-            });
+            //Thanks to Google API code, the videos pretty much get themselves.
         },
         setVideoList: function (data) {
             this.ytResults = data;
-            console.log(this.ytResults);
             $("#videos").css({ "color": "red" });
 
         },
@@ -242,6 +250,7 @@ function updateSigninStatus(isSignedIn) {
     } else {
         authorizeButton.style.display = 'block';
         signoutButton.style.display = 'none';
+        vm.ytResults = [{}];
     }
 }
 
