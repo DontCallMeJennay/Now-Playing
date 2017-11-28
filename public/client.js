@@ -9,8 +9,7 @@ Vue.component("twitch-list", {
         getName: function () {
             if (document.getElementById("username") !== "") {
                 user = document.getElementById("username").value.toLowerCase();
-                console.log(user);
-                //getStreamList(user);
+                vm.getStreamList(user);
             }
         }
     },
@@ -136,11 +135,28 @@ var vm = new Vue({
             this.twitchName = user;
         },
         getStreamList: function (user) {
-            let follows = "";
-            $.get("/streams", function (data) {
-            }).then((data) => {
-                this.setStreamList(data);
-                $("#games").css({ "color": "#4B367C" });
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: `https://api.twitch.tv/kraken/users/${user}/follows/channels?limit=20&sortby=last_broadcast`,
+                headers: {
+                    "Client-ID": "kjuxb8d6m4k8sek7vqnfvr3y1694077",
+                },
+                success: function(data) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/streams",                        
+                        data: data,
+                        headers: { "username": user },
+                        success: function(data) {
+                            vm.setStreamList(data);
+                            $("#games").css({ "color": "#4B367C" });
+                        }
+                    });
+                },
+                error: function(err) {
+                    console.log(err);
+                }
             });
         },
         setStreamList: function (data) {
@@ -159,7 +175,7 @@ var vm = new Vue({
         }
     },
     mounted() {
-        this.getStreamList();
+        //this.getStreamList();
     }
 })
 

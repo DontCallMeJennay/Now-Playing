@@ -18,43 +18,19 @@ router.get("/", function (request, response) {
     response.sendFile(__dirname + '/public/index.html');
 });
 
-router.get("/auth", function (request, response) {
-    console.log(request.headers);
-    console.log(response.headers);
-    response.sendFile(__dirname + '/public/logged-in.html');
-});
-
-
-
-router.get('/streams', function (req, res, next) {
-    let user = req.params.user;
+router.post('/streams', function (req, res, next) {
     T_DATA = [];
-    var follows = new Promise((resolve, reject) => {
-        let options = {
-            uri: `https://api.twitch.tv/kraken/users/${user}/follows/channels?limit=20&sortby=last_broadcast`,
-            headers: { 'Client-ID': KEY_T },
-            json: true
+    let user = req.headers.username;
+    let data = req.body;
+    var whosLive = new Promise((resolve, reject) => {
+        for (var i = 0; i < 20; i++) {
+            let name = data.follows[i].channel.name;
+            let x = makePromise(name);
+            T_DATA.push(x);
         }
-        rp(options, (err, res, body) => {
-            if (err) reject(res.statusText);
-            resolve(body);
-        });
     });
-
-    Promise.resolve(follows).then((data) => {
-        var whosLive = new Promise((resolve, reject) => {
-            for (var i = 0; i < 20; i++) {
-                let name = data.follows[i].channel.name;
-                let x = makePromise(name);
-                T_DATA.push(x);
-            }
-        });
-
-        Promise.all(T_DATA).then((data) => {
-            res.send(data);
-        });
-
-
+    Promise.all(T_DATA).then((data) => {
+        res.send(data);
     });
 });
 
@@ -81,20 +57,5 @@ function makePromise(name) {
     });
 }
 
-/*
-router.get('/videos', function(req, res, next) {
-  //let name = req.params.name;
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        url: 'https://api.twitch.tv/kraken/streams/' + name,
-        headers: { 'Client-ID': KEY_Y },
-        error: (err) => console.log(err.message),
-        success: function(data) {
-            res.send(data);
-        }
-    });
-});
-*/
 
 module.exports = router;
