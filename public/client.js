@@ -115,7 +115,7 @@ var vm = new Vue({
             let endPoint = "https://api.twitch.tv/kraken/oauth2/authorize";
             let params = {
                 "client_id": "kjuxb8d6m4k8sek7vqnfvr3y1694077",
-                "redirect_uri": "http://localhost/logged-in.html",
+                "redirect_uri": "http://localhost/auth",
                 "response_type": "token",
                 "scope": "user_read"
         }

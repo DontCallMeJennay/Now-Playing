@@ -14,40 +14,19 @@ var HOST_URL = "http://localhost/oauth";
 var T_DATA = [];
 var tCode = "";
 
-router.get("/", function(request, response) {
+router.get("/", function (request, response) {
     response.sendFile(__dirname + '/public/index.html');
 });
 
-/* I'm not sure I actually need this...
-
-router.get("/auth", function(request, response) {
-    let uri = `https://api.twitch.tv/kraken/oauth2/authorize
-    ?client_id=${KEY_T}
-    &redirect_uri=${HOST_URL}
-    &response_type=token&scope=user_read`;
-    rp(uri, (err, res, body) => {
-        if(err) console.error(res.statusText);
-        //
-    }).then(function(res) {
-        res.send(res);
-    });
+router.get("/auth", function (request, response) {
+    console.log(request.headers);
+    console.log(response.headers);
+    response.sendFile(__dirname + '/public/logged-in.html');
 });
 
-router.post("/auth", function(request, response) {
-    let uri= `https://api.twitch.tv/kraken/oauth2/token
-    ?client_id=${KEY_T}
-    &client_secret=${SECRET_T}
-    &code=${tCode}
-    &grant_type=authorization_code
-    &redirect_uri=${HOST_URL}`
-    rp(uri, (err, res, body) => {
-        if(err) console.error(res.statusText);
 
-    });
-})
-*/
 
-router.get('/streams', function(req, res, next) {
+router.get('/streams', function (req, res, next) {
     //let user = req.params.user;
     T_DATA = [];
     var follows = new Promise((resolve, reject) => {
@@ -86,7 +65,7 @@ function makePromise(name) {
             headers: { 'Client-ID': KEY_T },
             json: true
         }
-        rp(options, function(err, res, body) {
+        rp(options, function (err, res, body) {
             if (err) next(err);
             if (body.stream) {
                 resolve(body.stream.channel);
