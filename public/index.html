@@ -7,19 +7,33 @@
     <meta name="description" content="Media account aggregator">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
-    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Exo+2:400,800|Libre+Baskerville:400,400italic|Poller+One:400">
+    <link href="https://fonts.googleapis.com/css?family=Cabin|Open+Sans" rel="stylesheet">
     <script src="https://use.fontawesome.com/59c976fd61.js"></script>
     <script src="https://unpkg.com/vue@2.5.2/dist/vue.js"></script>
     <link rel="stylesheet" href="/public/style.css">
 </head>
 
 <body>
-    <section id="vue-app">
-        <button class="btn-filter" id="twitch-auth" style="display: block;" @click=twitchAuth>Authorize T</button>
-        <button class="btn-filter" id="twitch-signout" style="display: block;">Sign Out T</button>
-        <button class="btn-filter" id="authorize-button" style="display: block;">Authorize Y</button>
-        <button class="btn-filter" id="signout-button" style="display: block;">Sign Out Y</button>
-    </section>
+    <header>
+        <h1>Now Playing!</h1>
+        <span>
+        <button id="games"><i class="fa fa-2x fa-twitch" aria-hidden="true"></i></button>
+        <button id="videos"><i class="fa fa-2x fa-youtube-play" aria-hidden="true"></i></button>
+        </span>
+    </header>
+    <hr />
+    <main id="vue-app">
+        <section class="twitch" id="tList">
+            <twitch-list content-title="Twitch.tv" :content-data="twitchResults">
+                </content-list>
+        </section>
+        <section id="yList">
+            <youtube-list content-title="YouTube" :content-data="ytResults">
+                </content-list>
+        </section>
+    </main>
+    <footer>
+    </footer>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>

@@ -1,8 +1,35 @@
 Vue.component("twitch-list", {
-    props: ["content-title", "content-data", "content-type"],
+    props: ["content-title", "content-data", "content-type", "twitchName", "clearTable"],
+    data: function () {
+        return {
+            user: this.twitchName,
+            signedIn: false
+        }
+    },
+    methods: {
+        getName: function () {
+            if (document.getElementById("username").value !== "") {
+                user = document.getElementById("username").value.toLowerCase();
+                vm.getStreamList(user);
+                this.signedIn = true;
+            }
+        },
+        clearData: function () {
+            this.signedIn = false;
+            this.user = "";
+            this.clearTable("twitchResults");
+        }
+    },
     template: `
         <div class="content">
-            <table>
+            <section v-if="this.signedIn === false">
+                <label for="username">Enter Twitch.tv username</label>
+                <input type="text" v-model=user id="username"/>
+                <button class="btn-filter" id="twitch-auth" @click=getName()>Get follow list</button></button>
+            </section>
+        <button v-if="this.signedIn === true" class="btn-filter" id="twitch-signout" style="display: block;" @click=clearData()>Sign Out T</button>
+
+        <table v-if="this.signedIn === true">
             <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead>
                     <tr>
@@ -42,7 +69,9 @@ Vue.component("youtube-list", {
     },
     template: `
         <div class="content">
-            <table>
+            <button class="btn-filter" id="authorize-button" style="display: block;">Authorize Y</button>
+            <button class="btn-filter" id="signout-button" style="display: block;">Sign Out Y</button>
+            <table v-if="this.contentData !== []">
                 <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
             <thead>
                 <tr>
@@ -59,7 +88,7 @@ Vue.component("youtube-list", {
                             :logo="item.snippet.thumbnails.default.url" 
                             :name="item.snippet.title" 
                             :newItem="item.contentDetails.newItemCount"                                                                               
-                            url="https://www.youtube.com"                                                       
+                            :url="item.snippet.resourceId.channelId"                                                       
                         ></youtube-result> 
                     </template>
                 </template>            
@@ -95,8 +124,8 @@ Vue.component("youtube-result", {
     },
     template: `<tr class="row">
                 <th scope="row"><img :src="logo" :alt="name + ' channel logo'"><span> {{newItem}} </span></th>
-                <td><span class="names"><a :href="url"> {{ name }} </a></span></td>
-                <td><span class="sm-hide"> <a :href="url"> {{ desc }} </a></span></td>
+                <td><span class="names"><a :href="'https://youtube.com/channel/' + url + '/videos'"> {{ name }} </a></span></td>
+                <td><span class="sm-hide"> <a :href="'https://youtube.com/channel/' + url + '/videos'"> {{ desc }} </a></span></td>
                 </tr>`,
 })
 
@@ -108,37 +137,36 @@ var vm = new Vue({
         }],
         ytResults: [{
 
-        }]
+        }],
+        twitchName: ""
     },
     methods: {
-        twitchAuth: function () {
-            let endPoint = "https://api.twitch.tv/kraken/oauth2/authorize";
-            let params = {
-                "client_id": "kjuxb8d6m4k8sek7vqnfvr3y1694077",
-                "redirect_uri": "http://localhost/logged-in.html",
-                "response_type": "token",
-                "scope": "user_read"
-        }
-            const auth = document.createElement("form");
-            auth.setAttribute("method", "GET");
-            auth.setAttribute("action", endPoint);
-            auth.setAttribute("class", "hidden");
-            for (var i in params) {
-                let input = document.createElement("input");
-                input.setAttribute("type", "hidden");
-                input.setAttribute("name", i);
-                input.setAttribute("value", params[i]);
-                auth.appendChild(input);                
-            }
-            document.body.appendChild(auth);
-            auth.submit();
+        setUser: function (user) {
+            this.twitchName = user;
         },
-        getStreamList: function (user) {
-            let follows = "";
-            $.get("/streams", function (data) {
-            }).then((data) => {
-                this.setStreamList(data);
-                $("#games").css({ "color": "#4B367C" });
+        getStreamList: function (user) {            
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: `https://api.twitch.tv/kraken/users/${user}/follows/channels?limit=20&sortby=last_broadcast`,
+                headers: {
+                    "Client-ID": "kjuxb8d6m4k8sek7vqnfvr3y1694077",
+                },
+                success: function (data) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/streams",
+                        data: data,
+                        headers: { "username": user },
+                        success: function (data) {
+                            vm.setStreamList(data);
+                            $("#games").css({ "color": "#4B367C" });
+                        }
+                    });
+                },
+                error: function (err) {
+                    console.error(err);
+                }
             });
         },
         setStreamList: function (data) {
@@ -148,16 +176,18 @@ var vm = new Vue({
         getVideoList: function (user) {
             $.get("/videos", function (data) {
             }).then((data) => {
-                this.setVideoList(data);
-                $("#videos").css({ "color": "red" });
+                this.setVideoList(data);       
             });
         },
         setVideoList: function (data) {
             this.ytResults = data;
+            console.log(this.ytResults);
+            $("#videos").css({ "color": "red" });
+
+        },
+        clearTable: function (data) {
+            [data] = [{}];
         }
-    },
-    mounted() {
-        this.getStreamList();
     }
 })
 
