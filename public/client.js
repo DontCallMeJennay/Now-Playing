@@ -1,7 +1,20 @@
 Vue.component("twitch-list", {
-    props: ["content-title", "content-data", "content-type"],
+    props: ["content-title", "content-data", "content-type", "twitchName"],
+    methods: {
+        getName: function () {
+            if (document.getElementById("username") !== "") {
+                let twitchName = document.getElementById("username").value.toLowerCase();
+                console.log(twitchName);
+                //getStreamList(twitchName);
+            }
+        }
+    },
     template: `
         <div class="content">
+        <label for="username">Enter Twitch.tv username</label>
+        <input type="text" v-model=twitchName id="username"/>
+        <button class="btn-filter" id="twitch-auth" style="display: block;" @click=getName()>Get follow list</button></button>
+        <button class="btn-filter" id="twitch-signout" style="display: block;">Sign Out T</button>
             <table>
             <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead>
@@ -108,30 +121,12 @@ var vm = new Vue({
         }],
         ytResults: [{
 
-        }]
+        }],
+        twitchName: ""
     },
     methods: {
-        twitchAuth: function () {
-            let endPoint = "https://api.twitch.tv/kraken/oauth2/authorize";
-            let params = {
-                "client_id": "kjuxb8d6m4k8sek7vqnfvr3y1694077",
-                "redirect_uri": "http://localhost/auth",
-                "response_type": "token",
-                "scope": "user_read"
-        }
-            const auth = document.createElement("form");
-            auth.setAttribute("method", "GET");
-            auth.setAttribute("action", endPoint);
-            auth.setAttribute("class", "hidden");
-            for (var i in params) {
-                let input = document.createElement("input");
-                input.setAttribute("type", "hidden");
-                input.setAttribute("name", i);
-                input.setAttribute("value", params[i]);
-                auth.appendChild(input);                
-            }
-            document.body.appendChild(auth);
-            auth.submit();
+        setUser: function(user) {
+            this.twitchName = user;
         },
         getStreamList: function (user) {
             let follows = "";

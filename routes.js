@@ -27,11 +27,11 @@ router.get("/auth", function (request, response) {
 
 
 router.get('/streams', function (req, res, next) {
-    //let user = req.params.user;
+    let user = req.params.user;
     T_DATA = [];
     var follows = new Promise((resolve, reject) => {
         let options = {
-            uri: "https://api.twitch.tv/kraken/users/silverrain64/follows/channels?limit=20&sortby=last_broadcast",
+            uri: `https://api.twitch.tv/kraken/users/${user}/follows/channels?limit=20&sortby=last_broadcast`,
             headers: { 'Client-ID': KEY_T },
             json: true
         }
