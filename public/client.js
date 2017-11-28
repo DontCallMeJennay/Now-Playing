@@ -1,18 +1,25 @@
 Vue.component("twitch-list", {
     props: ["content-title", "content-data", "content-type", "twitchName"],
+    data: function() {
+        return {
+            user: this.twitchName
+        }
+    },
     methods: {
         getName: function () {
             if (document.getElementById("username") !== "") {
-                let twitchName = document.getElementById("username").value.toLowerCase();
-                console.log(twitchName);
-                //getStreamList(twitchName);
+                user = document.getElementById("username").value.toLowerCase();
+                console.log(user);
+                //getStreamList(user);
             }
         }
     },
     template: `
         <div class="content">
+
         <label for="username">Enter Twitch.tv username</label>
-        <input type="text" v-model=twitchName id="username"/>
+        <input type="text" v-model=user id="username"/>
+
         <button class="btn-filter" id="twitch-auth" style="display: block;" @click=getName()>Get follow list</button></button>
         <button class="btn-filter" id="twitch-signout" style="display: block;">Sign Out T</button>
             <table>
