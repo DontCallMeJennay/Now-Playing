@@ -8,13 +8,49 @@ var router = express.Router();
 
 var KEY_T = process.env.KEY_T;
 var KEY_Y = process.env.KEY_Y;
-var SECRET_T = process.env.SECRET_T;
+var KEY_S = process.env.KEY_S;
 
 var T_DATA = [];
 var tCode = "";
 
 router.get("/", function (request, response) {
     response.sendFile(__dirname + '/public/index.html');
+});
+
+router.post("/steam", function (req, res, next) {
+    let user = "76561197960435530";
+    //let user = req.headers.username;
+    var getList = new Promise((resolve, reject) => {
+        let options = {
+            uri: `http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=${KEY_S}&steamid=${user}&relationship=friend`,
+            json: true
+        };
+        rp(options)                     //get friend list, then string together friend IDs
+            .then((res) => {
+                let str = [];
+                for (var i in res) {
+                    str.push(res[i].steamid);
+                }
+                str = str.join(",");
+                let options = {
+                    uri: `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${KEY_S}&steamids=${str}`,
+                    json: true
+                }
+                rp(options)
+                    .then((res) => {
+                        resolve(res);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    });
+    Promise.resolve(getList).then(function(data) {
+        res.send(data);
+    });
 });
 
 router.post('/streams', function (req, res, next) {
@@ -58,7 +94,7 @@ router.post('/streams', function (req, res, next) {
                                 allData.push(res.data);
                                 for (var j in res.data) {
                                     if (res.data[j].type === "live") {
-                                        getNames.push(res.data[j]["user_id"]);                                   
+                                        getNames.push(res.data[j]["user_id"]);
                                     }
                                 }
                                 let options = {

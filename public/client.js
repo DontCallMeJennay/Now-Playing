@@ -32,9 +32,9 @@ Vue.component("twitch-list", {
     },
     mounted() {
         let x = localStorage.getItem("twitchName");
-        if(x) { 
+        if (x) {
             this.signedIn = true;
-            this.user = x;  
+            this.user = x;
         }
     },
     template: `
@@ -175,7 +175,7 @@ var vm = new Vue({
             });
         },
         setStreamList: function (data) {
-            for (var i=0; i < data[0].length; i++) {
+            for (var i = 0; i < data[0].length; i++) {
                 data[0][i]["display_name"] = data[1][i]["display_name"];
                 data[0][i]["logo"] = data[1][i]["profile_image_url"];
             }
@@ -200,7 +200,7 @@ var vm = new Vue({
             this.getStreamList(this.twitchName);
         }
     }
-    });
+});
 
 /*
 The following code is from the YouTube Data API quickstart guide, with some slight modifications.
@@ -274,3 +274,21 @@ function getSubscriptions() {
         vm.setVideoList(response.result.items);
     });
 }
+
+
+$("document").ready(function() {
+    $("#steam").on('click', function () {
+        console.log('click');
+        $.ajax({
+            type: "POST",
+            url: "/steam",
+            dataType: "json",
+            error: function(err) {
+                console.log(err);
+            },
+            success: function(data) {
+                console.log(data);
+            }
+        });
+    });
+});
