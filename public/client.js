@@ -30,12 +30,11 @@ Vue.component("twitch-list", {
             vm.clearList();
         }
     },
-    created() {
+    mounted() {
         let x = localStorage.getItem("twitchName");
         if(x) { 
             this.signedIn = true;
-            this.user = x;
-            vm.getStreamList(x);
+            this.user = x;  
         }
     },
     template: `
@@ -198,7 +197,6 @@ var vm = new Vue({
         let x = localStorage.getItem("twitchName");
         if (x) {
             this.setUser(x);
-            console.log("storage: ", this.twitchName);
             this.getStreamList(this.twitchName);
         }
     }
@@ -209,7 +207,7 @@ The following code is from the YouTube Data API quickstart guide, with some slig
 See https://developers.google.com/youtube/v3/quickstart/js.
 */
 
-var CLIENT_ID = '372774319049-v8c698o1ntn42gctbgm8semjcsgapg3o.apps.googleusercontent.com';
+var CLIENT_ID = KEY_Y;
 var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"];
 var SCOPES = 'https://www.googleapis.com/auth/youtube.readonly';
 
@@ -276,18 +274,3 @@ function getSubscriptions() {
         vm.setVideoList(response.result.items);
     });
 }
-
-$("document").ready(function () {
-    $('#games').on('click', function () {
-        $('#tList').slideToggle(500);
-        $('#yList').slideUp(500);
-        $(this).addClass('btn-lit');
-        $('#videos').removeClass('btn-lit');
-    });
-    $('#videos').on('click', function () {
-        $('#yList').slideToggle(500);
-        $('#tList').slideUp(500);
-        $(this).addClass('btn-lit');
-        $('#games').removeClass('btn-lit');
-    });
-});

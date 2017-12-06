@@ -36,5 +36,5 @@ This project was inspired by the [freeCodeCamp](https://freecodecamp.com) API pr
 * ~~Rewrite previous project's AJAX code into Express~~ Completed, but I'm reviewing whether server-side requests are actually necessary
 * ~~Figure out how to handle asynchronous updating with Vue~~
 * ~~Get a working product going with two services~~
-* Set up OAuth and modify GETs so any user can access their stuff
+* ~~Set up OAuth and modify GETs so any user can access their stuff~~ Oauth isn't actually required for read access.
 * Research and add 1-3 more services
