@@ -158,44 +158,34 @@ var vm = new Vue({
         },
         getStreamList: function (user) {
             $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: `https://api.twitch.tv/kraken/users/${user}/follows/channels?limit=20&sortby=last_broadcast`,
-                headers: {
-                    "Client-ID": "kjuxb8d6m4k8sek7vqnfvr3y1694077",
-                },
+                type: "POST",
+                url: "/streams",
+                headers: { "username": user },
                 success: function (data) {
-                    $.ajax({
-                        type: "POST",
-                        url: "/streams",
-                        data: data,
-                        headers: { "username": user },
-                        success: function (data) {
-                            vm.setStreamList(data);
-                            $("#games").css({ "color": "#4B367C" });
-                        }
-                    });
+                    console.log("Received data: ", data);
+                    vm.setStreamList(data);
+                    $("#games").css({ "color": "#4B367C" });
                 },
                 error: function (err) {
                     console.error(err);
                 }
             });
-        },
-        setStreamList: function (data) {
-            data = data.filter((i) => i.status !== "stream offline");
-            this.twitchResults = data;
-        },
-        getVideoList: function (user) {
-            //Thanks to Google API code, the videos pretty much get themselves.
-        },
-        setVideoList: function (data) {
-            this.ytResults = data;
-            $("#videos").css({ "color": "red" });
-
-        },
-        clearTable: function (data) {
-            [data] = [{}];
         }
+    },
+    setStreamList: function (data) {
+        data = data.filter((i) => i.status !== "stream offline");
+        this.twitchResults = data;
+    },
+    getVideoList: function (user) {
+        //Thanks to Google API code, the videos pretty much get themselves.
+    },
+    setVideoList: function (data) {
+        this.ytResults = data;
+        $("#videos").css({ "color": "red" });
+
+    },
+    clearTable: function (data) {
+        [data] = [{}];
     }
 })
 

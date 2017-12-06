@@ -9,7 +9,6 @@ var router = express.Router();
 var KEY_T = process.env.KEY_T;
 var KEY_Y = process.env.KEY_Y;
 var SECRET_T = process.env.SECRET_T;
-var HOST_URL = "http://localhost/oauth";
 
 var T_DATA = [];
 var tCode = "";
@@ -19,42 +18,60 @@ router.get("/", function (request, response) {
 });
 
 router.post('/streams', function (req, res, next) {
-    T_DATA = [];
     let user = req.headers.username;
-    let data = req.body;
-    var whosLive = new Promise((resolve, reject) => {
-        for (var i = 0; i < 20; i++) {
-            let name = data.follows[i].channel.name;
-            let x = makePromise(name);
-            T_DATA.push(x);
-        }
+    var getList = new Promise((resolve, reject) => {   
+        let options = {
+            uri: "https://api.twitch.tv/helix/users?login=" + user,
+            headers: {
+                "Client-ID": KEY_T
+            },
+            json: true
+        };
+        rp(options)
+            .then((res) => {                             //request numeric user ID for username
+                let userid = res.data[0].id;
+                let options = {
+                    uri: "https://api.twitch.tv/helix/users/follows?from_id=" + userid,
+                    headers: {
+                        "Client-ID": KEY_T
+                    },
+                    json: true
+                };
+                rp(options)                             //get follow list and make string of user IDs
+                    .then((res) => {
+                        let userList = [];
+                        for (var i in res.data) {
+                            userList.push(res.data[i]["to_id"]);
+                        }
+                        const userStr = userList.join("&user_id=");
+                        let options = {
+                            uri: "https://api.twitch.tv/helix/streams?first=20&user_id=" + userStr,
+                            headers: {
+                                "Client-ID": KEY_T
+                            },
+                            json: true
+                        };
+                        rp(options)                     //request info for list of user IDs
+                            .then((res) => {
+                               resolve(res);
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     });
-    Promise.all(T_DATA).then((data) => {
+    Promise.resolve(getList).then((data) => {
         res.send(data);
     });
+
 });
 
-function makePromise(name) {
-    return new Promise((resolve, reject) => {
-        let options = {
-            uri: "https://api.twitch.tv/kraken/streams/" + name,
-            headers: { 'Client-ID': KEY_T },
-            json: true
-        }
-        rp(options, function (err, res, body) {
-            if (err) next(err);
-            if (body.stream) {
-                resolve(body.stream.channel);
-            } else {
-                let offline = {
-                    "display_name": name,
-                    "logo": "/public/offline.png",
-                    "status": "stream offline"
-                }
-                resolve(offline);
-            };
-        });
-    });
-}
 
 module.exports = router;
