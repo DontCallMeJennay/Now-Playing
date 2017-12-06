@@ -19,7 +19,7 @@ router.get("/", function (request, response) {
 
 router.post('/streams', function (req, res, next) {
     let user = req.headers.username;
-    var getList = new Promise((resolve, reject) => {   
+    var getList = new Promise((resolve, reject) => {
         let options = {
             uri: "https://api.twitch.tv/helix/users?login=" + user,
             headers: {
@@ -27,17 +27,17 @@ router.post('/streams', function (req, res, next) {
             },
             json: true
         };
-        rp(options)
-            .then((res) => {                             //request numeric user ID for username
+        rp(options)                                     //request numeric user ID for given username
+            .then((res) => {
                 let userid = res.data[0].id;
                 let options = {
-                    uri: "https://api.twitch.tv/helix/users/follows?from_id=" + userid,
+                    uri: "https://api.twitch.tv/helix/users/follows?first=100&from_id=" + userid,
                     headers: {
                         "Client-ID": KEY_T
                     },
                     json: true
                 };
-                rp(options)                             //get follow list and make string of user IDs
+                rp(options)                             //use numeric ID to get follow list and assemble string
                     .then((res) => {
                         let userList = [];
                         for (var i in res.data) {
@@ -45,15 +45,37 @@ router.post('/streams', function (req, res, next) {
                         }
                         const userStr = userList.join("&user_id=");
                         let options = {
-                            uri: "https://api.twitch.tv/helix/streams?first=20&user_id=" + userStr,
+                            uri: "https://api.twitch.tv/helix/streams?first=100&user_id=" + userStr,
                             headers: {
                                 "Client-ID": KEY_T
                             },
                             json: true
                         };
-                        rp(options)                     //request info for list of user IDs
+                        rp(options)                     //requesting details for follow list
                             .then((res) => {
-                               resolve(res);
+                                let allData = [];
+                                let getNames = [];
+                                allData.push(res.data);
+                                for (var j in res.data) {
+                                    if (res.data[j].type === "live") {
+                                        getNames.push(res.data[j]["user_id"]);                                   
+                                    }
+                                }
+                                let options = {
+                                    uri: "https://api.twitch.tv/helix/users?id=" + getNames.join("&id="),
+                                    headers: {
+                                        "Client-ID": KEY_T
+                                    },
+                                    json: true
+                                };
+                                rp(options)             //requesting display names for follow list user IDs
+                                    .then((res) => {
+                                        allData.push(res.data);
+                                        resolve(allData);
+                                    })
+                                    .catch((err) => {
+                                        console.log(err);
+                                    });
                             })
                             .catch((err) => {
                                 console.log(err);

@@ -1,5 +1,12 @@
 Vue.component("twitch-list", {
-    props: ["content-title", "content-data", "content-type", "twitchName", "clearTable"],
+    props: {
+        contentTitle: String,
+        contentData: Array,
+        contentType: String,
+        clearList: Function,
+        getStreamList: Function,
+        twitchName: String
+    },
     data: function () {
         return {
             user: this.twitchName,
@@ -8,8 +15,9 @@ Vue.component("twitch-list", {
     },
     methods: {
         getName: function () {
-            if (document.getElementById("username").value !== "") {
-                user = document.getElementById("username").value.toLowerCase();
+            let input = document.getElementById("username");
+            if (input.value !== "") {
+                user = input.value.toLowerCase();
                 vm.getStreamList(user);
                 this.signedIn = true;
                 localStorage.setItem("twitchName", user);
@@ -18,16 +26,17 @@ Vue.component("twitch-list", {
         clearData: function () {
             this.signedIn = false;
             this.user = "";
-            this.clearTable("twitchResults");
+            localStorage.removeItem("twitchName");
+            vm.clearList();
         }
     },
-    mounted() {
+    created() {
         let x = localStorage.getItem("twitchName");
-        console.log(x);
-        if (x) {
+        if(x) { 
+            this.signedIn = true;
             this.user = x;
-            this.getName();
-        };
+            vm.getStreamList(x);
+        }
     },
     template: `
         <div class="content">
@@ -38,7 +47,7 @@ Vue.component("twitch-list", {
             </section>
             <section v-if="this.signedIn === true">
                 <span>Signed in as {{user}}</span>
-                <button class="btn-filter" id="twitch-signout" style="display: block;" @click=clearData()>Sign out of Twitch</button>
+                <button class="btn-filter" id="twitch-signout" style="display: block;" @click=clearData()>Clear Twitch list</button>
             </section>
 
         <table v-if="this.signedIn === true">
@@ -47,17 +56,15 @@ Vue.component("twitch-list", {
                     <tr>
                         <th scope="col">Channel</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Game</th>
                         <th scope="col">Description</th>
                     </tr>
                 </thead>
                 <tbody>                    
                     <template v-for="item in contentData">
                         <twitch-result
-                            :game="item.game"
                             :logo="item.logo"
                             :name="item.display_name"
-                            :status="item.status"
+                            :status="item.title"
                             :url="item.url"                                                       
                         ></twitch-result> 
                     </template>                       
@@ -71,16 +78,12 @@ Vue.component("youtube-list", {
     props: {
         contentTitle: String,
         contentData: Array,
-        contentType: String,
-        clearTable: Function
+        contentType: String
     },
     methods: {
         snip: function (string) {
             if (string.length > 100) { return string.substr(0, 200) + "..."; }
             else { return string; }
-        },
-        clearData: function () {
-            this.clearTable("ytResults");
         }
     },
     template: `
@@ -145,6 +148,7 @@ Vue.component("youtube-result", {
                 </tr>`,
 })
 
+
 var vm = new Vue({
     el: "#vue-app",
     data: {
@@ -170,24 +174,35 @@ var vm = new Vue({
                     console.error(err);
                 }
             });
+        },
+        setStreamList: function (data) {
+            for (var i=0; i < data[0].length; i++) {
+                data[0][i]["display_name"] = data[1][i]["display_name"];
+                data[0][i]["logo"] = data[1][i]["profile_image_url"];
+            }
+            this.twitchResults = data[0];
+        },
+        getVideoList: function (user) {
+            //Thanks to Google API code, the videos pretty much get themselves.
+        },
+        setVideoList: function (data) {
+            this.ytResults = data;
+            $("#videos").css({ "color": "red" });
+
+        },
+        clearList: function () {
+            this.twitchResults = [];
         }
     },
-    setStreamList: function (data) {
-        data = data.filter((i) => i.status !== "stream offline");
-        this.twitchResults = data;
-    },
-    getVideoList: function (user) {
-        //Thanks to Google API code, the videos pretty much get themselves.
-    },
-    setVideoList: function (data) {
-        this.ytResults = data;
-        $("#videos").css({ "color": "red" });
-
-    },
-    clearTable: function (data) {
-        [data] = [{}];
+    mounted() {
+        let x = localStorage.getItem("twitchName");
+        if (x) {
+            this.setUser(x);
+            console.log("storage: ", this.twitchName);
+            this.getStreamList(this.twitchName);
+        }
     }
-})
+    });
 
 /*
 The following code is from the YouTube Data API quickstart guide, with some slight modifications.
