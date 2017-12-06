@@ -27,16 +27,19 @@ router.post("/steam", function (req, res, next) {
         };
         rp(options)                     //get friend list, then string together friend IDs
             .then((res) => {
+                let data = res;
                 let str = [];
-                for (var i in res) {
-                    str.push(res[i].steamid);
-                }
+                for (var i in data["friendslist"]["friends"]) {
+                    console.log(data["friendslist"]["friends"][i]);
+                    str.push(data["friendslist"]["friends"][i]["steamid"]);
+               }               
                 str = str.join(",");
                 let options = {
                     uri: `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${KEY_S}&steamids=${str}`,
                     json: true
                 }
-                rp(options)
+                console.log("str: ", str);
+                rp(options)             //Get info about friend IDs
                     .then((res) => {
                         resolve(res);
                     })
