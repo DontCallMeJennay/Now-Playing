@@ -1,5 +1,84 @@
+Vue.component("steam-list", {
+    props: {
+        contentTitle: String,
+        contentData: Array
+    },
+    data: function () {
+        return {
+            user: this.steamId,
+            signedIn: false
+        }
+    },
+    methods: {
+        clearData: function () {
+            this.signedIn = false;
+            this.user = "";
+            localStorage.removeItem("steamName");
+            vm.clearList();
+        },
+        getSteamId: function () {
+            console.log("click");
+            let uinput = document.getElementById("steamNum").value;
+            console.log("uinput: ", uinput);
+            if (uinput !== "") {
+                this.getSteamInfo(uinput);
+                this.signedIn = true;
+                localStorage.setItem("steamName", uinput);
+            }
+        },
+        getSteamInfo: function (user) {
+            $.ajax({
+                type: "POST",
+                url: "/steam",
+                headers: { "username": user },
+                success: function (data) {
+                    vm.setSteamList(data);
+                    $("#steam").css({ "color": "white" });
+                },
+                error: function (err) {
+                    console.log(err.statusCode);
+                }
+            });
+        }
+    },
+    template: `
+            <div class="content">
+            <h3>Steam table goes here...</h3>
+            <input type="text" id="steamNum" />
+            <button id="#getsteam" @click="getSteamId">Get Steam data</button>
+                <section id="gamelist">
+                    <template v-for="friend in this.ContentData">
+                        <steam-item
+                        type="FRIEND">
+                        </steam-item>
+.message);                    </template>
+                </section>
+                <section id="friendList">
+                    <template v-for="game in this.ContentData">
+                        <steam-item
+                        type="GAME">
+                        </steam-item>
+                    </template>
+                </section>
+            </div>
+        `
+});
+
+Vue.component("steam-item", {
+    props: ["type"],
+    template: `<p>Testing steam-item {{type}} component</p>`
+});
+
+
 Vue.component("twitch-list", {
-    props: ["content-title", "content-data", "content-type", "twitchName", "clearTable"],
+    props: {
+        contentTitle: String,
+        contentData: Array,
+        contentType: String,
+        clearList: Function,
+        getStreamList: Function,
+        twitchName: String
+    },
     data: function () {
         return {
             user: this.twitchName,
@@ -8,16 +87,26 @@ Vue.component("twitch-list", {
     },
     methods: {
         getName: function () {
-            if (document.getElementById("username").value !== "") {
-                user = document.getElementById("username").value.toLowerCase();
+            let input = document.getElementById("username");
+            if (input.value !== "") {
+                user = input.value.toLowerCase();
                 vm.getStreamList(user);
                 this.signedIn = true;
+                localStorage.setItem("twitchName", user);
             }
         },
         clearData: function () {
             this.signedIn = false;
             this.user = "";
-            this.clearTable("twitchResults");
+            localStorage.removeItem("twitchName");
+            vm.clearList();
+        }
+    },
+    mounted() {
+        let x = localStorage.getItem("twitchName");
+        if (x) {
+            this.signedIn = true;
+            this.user = x;
         }
     },
     template: `
@@ -27,7 +116,10 @@ Vue.component("twitch-list", {
                 <input type="text" v-model=user id="username"/>
                 <button class="btn-filter" id="twitch-auth" @click=getName()>Get follow list</button></button>
             </section>
-        <button v-if="this.signedIn === true" class="btn-filter" id="twitch-signout" style="display: block;" @click=clearData()>Sign Out T</button>
+            <section v-if="this.signedIn === true">
+                <span>Signed in as {{user}}</span>
+                <button class="btn-filter" id="twitch-signout" style="display: block;" @click=clearData()>Clear Twitch list</button>
+            </section>
 
         <table v-if="this.signedIn === true">
             <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
@@ -35,17 +127,15 @@ Vue.component("twitch-list", {
                     <tr>
                         <th scope="col">Channel</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Game</th>
                         <th scope="col">Description</th>
                     </tr>
                 </thead>
                 <tbody>                    
                     <template v-for="item in contentData">
                         <twitch-result
-                            :game="item.game"
                             :logo="item.logo"
                             :name="item.display_name"
-                            :status="item.status"
+                            :status="item.title"
                             :url="item.url"                                                       
                         ></twitch-result> 
                     </template>                       
@@ -70,8 +160,8 @@ Vue.component("youtube-list", {
     template: `
         <div class="content">
             <button class="btn-filter" id="authorize-button" style="display: block;">Authorize Y</button>
-            <button class="btn-filter" id="signout-button" style="display: block;">Sign Out Y</button>
-            <table v-if="this.contentData !== []">
+            <button class="btn-filter" id="signout-button" style="display: block;">Sign out of YouTube</button>
+            <table v-if="this.contentData.length > 0">
                 <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
             <thead>
                 <tr>
@@ -129,40 +219,28 @@ Vue.component("youtube-result", {
                 </tr>`,
 })
 
+
 var vm = new Vue({
     el: "#vue-app",
     data: {
-        twitchResults: [{
-
-        }],
-        ytResults: [{
-
-        }],
-        twitchName: ""
+        twitchResults: [],
+        ytResults: [],
+        steamResults: [[], []],
+        twitchName: "",
+        steamId: ""
     },
     methods: {
         setUser: function (user) {
             this.twitchName = user;
         },
-        getStreamList: function (user) {            
+        getStreamList: function (user) {
             $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: `https://api.twitch.tv/kraken/users/${user}/follows/channels?limit=20&sortby=last_broadcast`,
-                headers: {
-                    "Client-ID": "kjuxb8d6m4k8sek7vqnfvr3y1694077",
-                },
+                type: "POST",
+                url: "/streams",
+                headers: { "username": user },
                 success: function (data) {
-                    $.ajax({
-                        type: "POST",
-                        url: "/streams",
-                        data: data,
-                        headers: { "username": user },
-                        success: function (data) {
-                            vm.setStreamList(data);
-                            $("#games").css({ "color": "#4B367C" });
-                        }
-                    });
+                    vm.setStreamList(data);
+                    $("#games").css({ "color": "#4B367C" });
                 },
                 error: function (err) {
                     console.error(err);
@@ -170,33 +248,43 @@ var vm = new Vue({
             });
         },
         setStreamList: function (data) {
-            data = data.filter((i) => i.status !== "stream offline");
-            this.twitchResults = data;
+            for (var i = 0; i < data[0].length; i++) {
+                data[0][i]["display_name"] = data[1][i]["display_name"];
+                data[0][i]["logo"] = data[1][i]["profile_image_url"];
+            }
+            this.twitchResults = data[0];
+        },
+        setSteamList: function (data) {
+            this.steamResults = data;
+            console.log("steamResults: ", data);
         },
         getVideoList: function (user) {
-            $.get("/videos", function (data) {
-            }).then((data) => {
-                this.setVideoList(data);       
-            });
+            //Thanks to Google API code, the videos pretty much get themselves.
         },
         setVideoList: function (data) {
             this.ytResults = data;
-            console.log(this.ytResults);
             $("#videos").css({ "color": "red" });
 
         },
-        clearTable: function (data) {
-            [data] = [{}];
+        clearList: function () {
+            this.twitchResults = [];
+        }
+    },
+    mounted() {
+        let x = localStorage.getItem("twitchName");
+        if (x) {
+            this.setUser(x, "twitchName");
+            this.getStreamList(this.twitchName);
         }
     }
-})
+});
 
 /*
 The following code is from the YouTube Data API quickstart guide, with some slight modifications.
 See https://developers.google.com/youtube/v3/quickstart/js.
 */
 
-var CLIENT_ID = '372774319049-v8c698o1ntn42gctbgm8semjcsgapg3o.apps.googleusercontent.com';
+var CLIENT_ID = KEY_Y;
 var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"];
 var SCOPES = 'https://www.googleapis.com/auth/youtube.readonly';
 
@@ -242,6 +330,7 @@ function updateSigninStatus(isSignedIn) {
     } else {
         authorizeButton.style.display = 'block';
         signoutButton.style.display = 'none';
+        vm.ytResults = [{}];
     }
 }
 
@@ -262,18 +351,3 @@ function getSubscriptions() {
         vm.setVideoList(response.result.items);
     });
 }
-
-$("document").ready(function () {
-    $('#games').on('click', function () {
-        $('#tList').slideToggle(500);
-        $('#yList').slideUp(500);
-        $(this).addClass('btn-lit');
-        $('#videos').removeClass('btn-lit');
-    });
-    $('#videos').on('click', function () {
-        $('#yList').slideToggle(500);
-        $('#tList').slideUp(500);
-        $(this).addClass('btn-lit');
-        $('#games').removeClass('btn-lit');
-    });
-});

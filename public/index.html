@@ -19,6 +19,7 @@
         <span>
         <button id="games"><i class="fa fa-2x fa-twitch" aria-hidden="true"></i></button>
         <button id="videos"><i class="fa fa-2x fa-youtube-play" aria-hidden="true"></i></button>
+        <button id="steam"><i class="fa fa-2x fa-steam-square" aria-hidden="true"></i></button>
         </span>
     </header>
     <hr />
@@ -30,6 +31,10 @@
         <section id="yList">
             <youtube-list content-title="YouTube" :content-data="ytResults">
                 </content-list>
+        </section>
+        <section id="sList">
+            <steam-list content-title="Steam" :content-data="steamResults">
+            </steam-list>
         </section>
     </main>
     <footer>

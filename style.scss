@@ -1,23 +1,11 @@
 $tpurple: #4B367C;
 $gold: #B59243;
-$whgreen: #F7FCB0;
-$ltgreen: #D6DC76;
-$green: #ACB342;
-$dkteal: #005D5D;
-$teal: #007777;
-$ltteal: #009999;
-$vblue: #000010;
-$vred: #100000;
-$vgreen: #001000;
+$sblue: #495665;
 a {
     text-decoration: none;
 }
 
 body {
-    background-color: black;
-    background: linear-gradient(to top right, black, $vblue, black, $vred, black, $vgreen, black);
-    background-size: cover;
-    color: #F7CB5B;
     font-family: 'Open Sans', sans-serif;
     margin: 5% auto;
     max-width: 1000px;
@@ -27,7 +15,6 @@ body {
 
 h1 {
     font-family: 'Cabin', serif;
-    text-shadow: 2px 2px black;
 }
 
 .twitch {
@@ -35,50 +22,32 @@ h1 {
     flex-direction: column;
     margin: 0 auto;
     flex: auto;
-    a:link {
-        color: $whgreen;
-    }
+    a:link {}
     a:active,
-    a:hover {
-        color: $ltgreen;
-    }
-    a:visited {
-        color: $green;
-    }
+    a:hover {}
+    a:visited {}
 }
 
 td {
-    background: linear-gradient(to bottom, rgba(175, 175, 175, 0.0), rgba(175, 175, 175, 0.1));
     padding: 0 10px;
 }
 
 .row {
-    border: 1px solid white;
     flex-direction: row !important;
 }
 
 .you {
     td:not(.red) {
         background-color: white;
-        background: linear-gradient(to bottom, (white), #FEE);
-        border: 1px inset $dkteal;
-        color: black;
         padding: 5px;
         text-align: center;
     }
-    a:link {
-        color: $ltteal;
-    }
+    a:link {}
     a:active,
-    a:hover {
-        color: $teal;
-    }
-    a:visited {
-        color: $dkteal;
-    }
+    a:hover {}
+    a:visited {}
     .red {
         background-color: red !important;
-        background: linear-gradient(to bottom, #F00, #C00);
     }
 }
 
@@ -111,35 +80,19 @@ footer {
     text-align: center;
 }
 
-hr {
-    border: 2px double #F7CB5B;
-}
+hr {}
 
 button {
-    background-color: black;
-    color: $gold;
-    border: 2px solid ($gold - #333);
-    border-radius: 50px;
     margin: auto;
     min-width: 10%;
     padding: 0.75em;
     line-height: 1;
 }
 
-button:focus {
-    outline: none;
-}
-
 .names {
-    font-family: "Poller One", sans-serif;
+    font-family: "Cabin", serif;
     font-size: 1.25em;
     padding: 0 5px;
-}
-
-.btn-lit {
-    background-color: $gold + #222;
-    background: radial-gradient(($gold + #333), $gold);
-    color: black;
 }
 
 .hidden {

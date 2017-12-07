@@ -2,10 +2,6 @@ a {
   text-decoration: none; }
 
 body {
-  background-color: black;
-  background: linear-gradient(to top right, black, #000010, black, #100000, black, #001000, black);
-  background-size: cover;
-  color: #F7CB5B;
   font-family: 'Open Sans', sans-serif;
   margin: 5% auto;
   max-width: 1000px;
@@ -13,47 +9,26 @@ body {
   overflow-y: scroll; }
 
 h1 {
-  font-family: 'Cabin', serif;
-  text-shadow: 2px 2px black; }
+  font-family: 'Cabin', serif; }
 
 .twitch {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
   flex: auto; }
-  .twitch a:link {
-    color: #F7FCB0; }
-  .twitch a:active,
-  .twitch a:hover {
-    color: #D6DC76; }
-  .twitch a:visited {
-    color: #ACB342; }
 
 td {
-  background: linear-gradient(to bottom, rgba(175, 175, 175, 0), rgba(175, 175, 175, 0.1));
   padding: 0 10px; }
 
 .row {
-  border: 1px solid white;
   flex-direction: row !important; }
 
 .you td:not(.red) {
   background-color: white;
-  background: linear-gradient(to bottom, white, #FEE);
-  border: 1px inset #005D5D;
-  color: black;
   padding: 5px;
   text-align: center; }
-.you a:link {
-  color: #009999; }
-.you a:active,
-.you a:hover {
-  color: #007777; }
-.you a:visited {
-  color: #005D5D; }
 .you .red {
-  background-color: red !important;
-  background: linear-gradient(to bottom, #F00, #C00); }
+  background-color: red !important; }
 
 header {
   display: flex;
@@ -79,31 +54,16 @@ footer {
   margin: 1% auto;
   text-align: center; }
 
-hr {
-  border: 2px double #F7CB5B; }
-
 button {
-  background-color: black;
-  color: #B59243;
-  border: 2px solid #825f10;
-  border-radius: 50px;
   margin: auto;
   min-width: 10%;
   padding: 0.75em;
   line-height: 1; }
 
-button:focus {
-  outline: none; }
-
 .names {
-  font-family: "Poller One", sans-serif;
+  font-family: "Cabin", serif;
   font-size: 1.25em;
   padding: 0 5px; }
-
-.btn-lit {
-  background-color: #d7b465;
-  background: radial-gradient(#e8c576, #B59243);
-  color: black; }
 
 .hidden {
   display: none; }
