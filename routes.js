@@ -18,30 +18,54 @@ router.get("/", function (request, response) {
 });
 
 router.post("/steam", function (req, res, next) {
-    let user = "76561197960435530";
+    let user = "silverrain64";
     //let user = req.headers.username;
     var getList = new Promise((resolve, reject) => {
         let options = {
-            uri: `http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=${KEY_S}&steamid=${user}&relationship=friend`,
+            uri: `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${KEY_S}&vanityurl=${user}`,
             json: true
         };
-        rp(options)                     //get friend list, then string together friend IDs
+        rp(options)
             .then((res) => {
-                let data = res;
-                let str = [];
-                for (var i in data["friendslist"]["friends"]) {
-                    console.log(data["friendslist"]["friends"][i]);
-                    str.push(data["friendslist"]["friends"][i]["steamid"]);
-               }               
-                str = str.join(",");
+                let user = res["response"]["steamid"];
+                console.log(user);
+
                 let options = {
-                    uri: `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${KEY_S}&steamids=${str}`,
+                    uri: `http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=${KEY_S}&steamid=${user}&relationship=friend`,
                     json: true
-                }
-                console.log("str: ", str);
-                rp(options)             //Get info about friend IDs
+                };
+                rp(options)                     //get friend list, then string together friend IDs
                     .then((res) => {
-                        resolve(res);
+                        let data = res;
+                        let str = [];
+                        for (var i in data["friendslist"]["friends"]) {
+                            str.push(data["friendslist"]["friends"][i]["steamid"]);
+                        }
+                        str = str.join(",");
+                        let options = {
+                            uri: `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${KEY_S}&steamids=${str}`,
+                            json: true
+                        };
+                        rp(options)             //Get info about friend IDs
+                            .then((res) => {
+                                let data = [];
+                                data.push(res);
+                                let options = {
+                                    uri: `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${KEY_S}&include_appinfo=1&steamid=${user}&format=json`,
+                                    json: true
+                                };
+                                rp(options)
+                                    .then((res) => {
+                                        data.push(res);
+                                        resolve(data);
+                                    })
+                                    .catch((err) => {
+                                        console.log(err);
+                                    });
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
                     })
                     .catch((err) => {
                         console.log(err);
@@ -51,7 +75,7 @@ router.post("/steam", function (req, res, next) {
                 console.log(err);
             });
     });
-    Promise.resolve(getList).then(function(data) {
+    Promise.resolve(getList).then(function (data) {
         res.send(data);
     });
 });

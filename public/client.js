@@ -281,6 +281,9 @@ $("document").ready(function() {
         console.log('click');
         $.ajax({
             type: "POST",
+            headers: {
+                "username": "silvercat64"
+            },
             url: "/steam",
             dataType: "json",
             error: function(err) {
