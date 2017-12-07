@@ -1,3 +1,75 @@
+Vue.component("steam-list", {
+    props: {
+        contentTitle: String,
+        contentData: Array
+    },
+    data: function () {
+        return {
+            user: this.steamId,
+            signedIn: false
+        }
+    },
+    methods: {
+        clearData: function () {
+            this.signedIn = false;
+            this.user = "";
+            localStorage.removeItem("steamName");
+            vm.clearList();
+        },
+        getSteamId: function () {
+            console.log("click");
+            let uinput = document.getElementById("steamNum").value;
+            console.log("uinput: ", uinput);
+            if (uinput !== "") {
+                this.getSteamInfo(uinput);
+                this.signedIn = true;
+                localStorage.setItem("steamName", uinput);
+            }
+        },
+        getSteamInfo: function (user) {
+            $.ajax({
+                type: "POST",
+                url: "/steam",
+                headers: { "username": user },
+                success: function (data) {
+                    vm.setSteamList(data);
+                    $("#steam").css({ "color": "white" });
+                },
+                error: function (err) {
+                    console.log(err.statusCode);
+                }
+            });
+        }
+    },
+    template: `
+            <div class="content">
+            <h3>Steam table goes here...</h3>
+            <input type="text" id="steamNum" />
+            <button id="#getsteam" @click="getSteamId">Get Steam data</button>
+                <section id="gamelist">
+                    <template v-for="friend in this.ContentData">
+                        <steam-item
+                        type="FRIEND">
+                        </steam-item>
+.message);                    </template>
+                </section>
+                <section id="friendList">
+                    <template v-for="game in this.ContentData">
+                        <steam-item
+                        type="GAME">
+                        </steam-item>
+                    </template>
+                </section>
+            </div>
+        `
+});
+
+Vue.component("steam-item", {
+    props: ["type"],
+    template: `<p>Testing steam-item {{type}} component</p>`
+});
+
+
 Vue.component("twitch-list", {
     props: {
         contentTitle: String,
@@ -153,7 +225,9 @@ var vm = new Vue({
     data: {
         twitchResults: [],
         ytResults: [],
-        twitchName: ""
+        steamResults: [[], []],
+        twitchName: "",
+        steamId: ""
     },
     methods: {
         setUser: function (user) {
@@ -165,7 +239,6 @@ var vm = new Vue({
                 url: "/streams",
                 headers: { "username": user },
                 success: function (data) {
-                    console.log("Received data: ", data);
                     vm.setStreamList(data);
                     $("#games").css({ "color": "#4B367C" });
                 },
@@ -180,6 +253,10 @@ var vm = new Vue({
                 data[0][i]["logo"] = data[1][i]["profile_image_url"];
             }
             this.twitchResults = data[0];
+        },
+        setSteamList: function (data) {
+            this.steamResults = data;
+            console.log("steamResults: ", data);
         },
         getVideoList: function (user) {
             //Thanks to Google API code, the videos pretty much get themselves.
@@ -196,7 +273,7 @@ var vm = new Vue({
     mounted() {
         let x = localStorage.getItem("twitchName");
         if (x) {
-            this.setUser(x);
+            this.setUser(x, "twitchName");
             this.getStreamList(this.twitchName);
         }
     }
@@ -274,24 +351,3 @@ function getSubscriptions() {
         vm.setVideoList(response.result.items);
     });
 }
-
-
-$("document").ready(function() {
-    $("#steam").on('click', function () {
-        console.log('click');
-        $.ajax({
-            type: "POST",
-            headers: {
-                "username": "silvercat64"
-            },
-            url: "/steam",
-            dataType: "json",
-            error: function(err) {
-                console.log(err);
-            },
-            success: function(data) {
-                console.log(data);
-            }
-        });
-    });
-});
