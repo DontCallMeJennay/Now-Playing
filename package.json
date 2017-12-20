@@ -13,6 +13,7 @@
     "devDependencies": {
         "babel-core": "^6.26.0",
         "babel-preset-env": "^1.6.0",
+        "browserify": "^14.5.0",
         "concurrently": "^3.5.0",
         "gulp": "^3.9.1",
         "gulp-babel": "^7.0.0",
@@ -20,6 +21,7 @@
         "gulp-imagemin": "^3.3.0",
         "gulp-ruby-sass": "^2.1.1",
         "gulp-uglify": "^3.0.0",
+        "gulp-vueify2": "0.0.3",
         "nodemon": "^1.12.1"
     },
     "dependencies": {
