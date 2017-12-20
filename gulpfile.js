@@ -4,6 +4,7 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     image = require('gulp-imagemin'),
     sass = require('gulp-ruby-sass'),
+    streamQ = require('streamqueue'),
     ugly = require('gulp-uglify');
 
 gulp.task('imagemin', () => {
@@ -13,34 +14,44 @@ gulp.task('imagemin', () => {
 });
 
 gulp.task('sass', () => {
-    sass('./style.scss')
+    sass('src/styles/style.scss')
         .on('error', sass.logError)
         .pipe(gulp.dest('public/'));
 });
 
-gulp.task('build-js', () => {
-    return gulp.src('src/scripts/**/*.js')
-        .pipe(concat('main.js'))
+gulp.task('concat-vues', () => {
+    return gulp.src('src/components/*.js')
+        .pipe(concat('vue-components.js'))
+        .pipe(gulp.dest('src/scripts/'));
+});
+
+gulp.task('build-js', ['concat-vues'], () => {
+    return streamQ({ objectMode: true },
+        gulp.src('src/scripts/vue-components.js'),
+        gulp.src('src/scripts/client.js'),
+        gulp.src('src/scripts/gapi.js')
+    )
+        .pipe(concat('client.js'))
         .pipe(babel({
             presets: ['env']
         }))
         .pipe(ugly())
-        .on('error', function(err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
-        .pipe(gulp.dest('build/scripts'));
+        .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
+        .pipe(gulp.dest('public/'));
 });
 
 gulp.task('build-routes', () => {
     return gulp.src('src/routes/**/*.js')
-        .pipe(concat('index.js'))
+        .pipe(concat('routes.js'))
         .pipe(babel({
             presets: ['env']
         }))
         .pipe(ugly())
-        .on('error', function(err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
-        .pipe(gulp.dest('build/routes/'));
+        .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
+        .pipe(gulp.dest('public/'));
 });
 
-gulp.watch('./style.scss', ['sass']);
+gulp.watch('src/styles/style.scss', ['sass']);
+gulp.watch('src/**/*.js', ['build-js']);
 
-
-gulp.task('default', ['sass']);
+gulp.task('default', ['sass', 'build-js', 'build-routes']);
