@@ -4,7 +4,7 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     image = require('gulp-imagemin'),
     sass = require('gulp-ruby-sass'),
-    vueify = require('gulp-vueify2'),
+    streamQ = require('streamqueue'),
     ugly = require('gulp-uglify');
 
 gulp.task('imagemin', () => {
@@ -19,21 +19,23 @@ gulp.task('sass', () => {
         .pipe(gulp.dest('public/'));
 });
 
-gulp.task('vueify', () => {
+gulp.task('concat-vues', () => {
     return gulp.src('src/components/*.js')
         .pipe(concat('vue-components.js'))
         .pipe(gulp.dest('src/scripts/'));
 });
 
-gulp.task('build-js', ['vueify'], () => {
-    return gulp.src('src/scripts/vue-components.js')
-            gulp.src('src/scripts/*.js')
+gulp.task('build-js', ['concat-vues'], () => {
+    return streamQ({ objectMode: true },
+        gulp.src('src/scripts/vue-components.js'),
+        gulp.src('src/scripts/*.js')
+    )
         .pipe(concat('client.js'))
         .pipe(babel({
             presets: ['env']
         }))
         .pipe(ugly())
-        .on('error', function(err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
+        .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
         .pipe(gulp.dest('public/'));
 });
 
@@ -44,12 +46,11 @@ gulp.task('build-routes', () => {
             presets: ['env']
         }))
         .pipe(ugly())
-        .on('error', function(err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
+        .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
         .pipe(gulp.dest('public/'));
 });
 
 gulp.watch('src/styles/style.scss', ['sass']);
-gulp.watch('src/scripts/*.js', ['build-js']);
-
+gulp.watch('src/**/*.js', ['build-js']);
 
 gulp.task('default', ['sass', 'build-js', 'build-routes']);
