@@ -26,12 +26,12 @@
     <hr />
     <main id="vue-app">
         <section class="twitch" id="tList">
-            <twitch-list content-title="Twitch.tv" :content-data="twitchResults">
-                </content-list>
+            <twitch-list content-title="Twitch.tv" :content-data="twitchResults" :get-stream-list="getStreamList">
+            </twitch-list>
         </section>
         <section id="yList">
             <youtube-list content-title="YouTube" :content-data="ytResults">
-                </content-list>
+            </youtube-list>
         </section>
         <section id="sList">
             <steam-list content-title="Steam" :content-data="steamResults">
