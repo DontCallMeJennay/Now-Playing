@@ -1,31 +1,65 @@
-var Ledger = new Vuex.Store({
+const steamModule = {
+    namespaced: true,
     state: {
-        count: 0,
-        steam: {
-            results: [],
-            signedIn: false,
-            username: "76561198010153724"
-        },
-        twitch: {
-            results: [],
-            signedIn: false,            
-            username: "silverrain64"
-        },
-        youtube: {            
-            results: [],
-            signedIn: false
-        }        
+        results: [],
+        signedIn: false,
+        username: "76561198010153724"
     },
     mutations: {
-        changeName (state, str) {
-            state.username = str
+        changeName(state, str) {
+            this.state.s.username = str
         },
-        toggleSignIn(state) {
-            state.signedIn = !state.signedIn
+        signedIn(state, bool) {
+            this.state.s.signedIn = bool
         },
-        updateData (state, payload) {
-            state.results = payload
+        update(state, payload) {
+            this.state.s.results = payload
         }
+    }
+}
+
+const twitchModule = {
+    namespaced: true,
+    state: {
+        results: [],
+        signedIn: false,
+        username: "silverrain64"
+    },
+    mutations: {
+        changeName(state, str) {
+            this.state.t.username = str
+        },
+        signedIn(state, bool) {
+            this.state.t.signedIn = bool
+        },
+        update(state, payload) {
+            this.state.t.results = payload
+        }
+    }
+}
+
+const youtubeModule = {
+    namespaced: true,
+    state: {
+        results: [],
+        signedIn: false
+    },
+    mutations: {
+        signedIn(state, bool) {
+            this.state.y.signedIn = bool
+        },
+        update(state, payload) {
+            this.state.y.results = payload
+        }
+    }
+}
+
+var Ledger = new Vuex.Store({
+    namespaced: true,
+    modules: {
+        s: steamModule,
+        t: twitchModule,
+        y: youtubeModule
     }
 })
 
@@ -33,11 +67,11 @@ var vm = new Vue({
     el: "#vue-app",
     store: Ledger,
     data: {
-        twitchResults: Ledger.state.twitch.results,
-        ytResults: Ledger.state.youtube.results,
-        steamResults: Ledger.state.steam.results,
-        twitchName: Ledger.state.twitch.username,
-        steamId: Ledger.state.steam.steamId
+        twitchResults: Ledger.state.t.results,
+        ytResults: Ledger.state.y.results,
+        steamResults: Ledger.state.s.results,
+        twitchName: Ledger.state.t.username,
+        steamId: Ledger.state.s.steamId
     },
     methods: {
         setUser: function (user) {
