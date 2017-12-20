@@ -1,10 +1,10 @@
-var ledger = new Vuex.Store({
+var Ledger = new Vuex.Store({
     state: {
         count: 0,
         steam: {
             results: [],
             signedIn: false,
-            steamId: "76561198010153724"
+            username: "76561198010153724"
         },
         twitch: {
             results: [],
@@ -17,20 +17,27 @@ var ledger = new Vuex.Store({
         }        
     },
     mutations: {
-        increment (state) {
-            state.count++
+        changeName (state, str) {
+            state.username = str
+        },
+        toggleSignIn(state) {
+            state.signedIn = !state.signedIn
+        },
+        updateData (state, payload) {
+            state.results = payload
         }
     }
 })
 
 var vm = new Vue({
     el: "#vue-app",
+    store: Ledger,
     data: {
-        twitchResults: ledger.state.twitch.results,
-        ytResults: ledger.state.youtube.results,
-        steamResults: ledger.state.steam.results,
-        twitchName: ledger.state.twitch.username,
-        steamId: ledger.state.steam.steamId
+        twitchResults: Ledger.state.twitch.results,
+        ytResults: Ledger.state.youtube.results,
+        steamResults: Ledger.state.steam.results,
+        twitchName: Ledger.state.twitch.username,
+        steamId: Ledger.state.steam.steamId
     },
     methods: {
         setUser: function (user) {
