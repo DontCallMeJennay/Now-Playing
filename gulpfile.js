@@ -13,34 +13,34 @@ gulp.task('imagemin', () => {
 });
 
 gulp.task('sass', () => {
-    sass('./style.scss')
+    sass('src/styles/style.scss')
         .on('error', sass.logError)
         .pipe(gulp.dest('public/'));
 });
 
 gulp.task('build-js', () => {
-    return gulp.src('src/scripts/**/*.js')
-        .pipe(concat('main.js'))
+    return gulp.src('src/scripts/*.js')
+        .pipe(concat('client.js'))
         .pipe(babel({
             presets: ['env']
         }))
         .pipe(ugly())
         .on('error', function(err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
-        .pipe(gulp.dest('build/scripts'));
+        .pipe(gulp.dest('public/'));
 });
 
 gulp.task('build-routes', () => {
     return gulp.src('src/routes/**/*.js')
-        .pipe(concat('index.js'))
+        .pipe(concat('routes.js'))
         .pipe(babel({
             presets: ['env']
         }))
         .pipe(ugly())
         .on('error', function(err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
-        .pipe(gulp.dest('build/routes/'));
+        .pipe(gulp.dest('public/'));
 });
 
-gulp.watch('./style.scss', ['sass']);
+gulp.watch('src/styles/style.scss', ['sass']);
 
 
-gulp.task('default', ['sass']);
+gulp.task('default', ['sass', 'build-js', 'build-routes']);
