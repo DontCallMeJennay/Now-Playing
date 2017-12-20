@@ -1,6 +1,7 @@
 const steamModule = {
     namespaced: true,
     state: {
+        active: true,
         results: [],
         signedIn: false,
         username: "76561198010153724"
@@ -8,6 +9,9 @@ const steamModule = {
     mutations: {
         changeName(state, str) {
             this.state.s.username = str
+        },
+        makeActive(state, bool) {
+            this.state.s.active = bool
         },
         signedIn(state, bool) {
             this.state.s.signedIn = bool
@@ -21,6 +25,7 @@ const steamModule = {
 const twitchModule = {
     namespaced: true,
     state: {
+        active: true,
         results: [],
         signedIn: false,
         username: "silverrain64"
@@ -28,6 +33,9 @@ const twitchModule = {
     mutations: {
         changeName(state, str) {
             this.state.t.username = str
+        },
+        makeActive(state, bool) {
+            this.state.t.active = bool
         },
         signedIn(state, bool) {
             this.state.t.signedIn = bool
@@ -41,10 +49,14 @@ const twitchModule = {
 const youtubeModule = {
     namespaced: true,
     state: {
+        active: true,
         results: [],
         signedIn: false
     },
     mutations: {
+        makeActive(state, bool) {
+            this.state.y.active = bool
+        },
         signedIn(state, bool) {
             this.state.y.signedIn = bool
         },
@@ -67,11 +79,11 @@ var vm = new Vue({
     el: "#vue-app",
     store: Ledger,
     data: {
+        steamResults: Ledger.state.s.results,
         twitchResults: Ledger.state.t.results,
         ytResults: Ledger.state.y.results,
-        steamResults: Ledger.state.s.results,
         twitchName: Ledger.state.t.username,
-        steamId: Ledger.state.s.steamId
+        steamId: Ledger.state.s.username
     },
     methods: {
         setUser: function (user) {
