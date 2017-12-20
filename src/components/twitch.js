@@ -15,12 +15,14 @@ Vue.component("twitch-list", {
     },
     methods: {
         getName: function () {
-            let input = document.getElementById("username");
-            if (input.value !== "") {
-                user = input.value.toLowerCase();
-                vm.getStreamList(user);
+            let uname = document.getElementById("username");
+            if (uname.value !== "") {
+                this.user = uname.value.toLowerCase();
+                vm.getStreamList(this.user);
                 this.signedIn = true;
-                localStorage.setItem("twitchName", user);
+                localStorage.setItem("twitchName", this.user);
+            } else {
+                console.log("Please enter a username");
             }
         },
         clearData: function () {
