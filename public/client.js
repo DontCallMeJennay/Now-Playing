@@ -21,8 +21,7 @@ Vue.component("steam-list", {
             let uinput = document.getElementById("steamNum").value;
             console.log("uinput: ", uinput);
             if (uinput !== "") {
-                this.getSteamInfo(uinput);
-                this.signedIn = true;
+                this.getSteamInfo(uinput);                
                 localStorage.setItem("steamName", uinput);
             }
         },
@@ -33,6 +32,7 @@ Vue.component("steam-list", {
                 headers: { "username": user },
                 success: function (data) {
                     vm.setSteamList(data);
+                    this.signedIn = true;
                     $("#steam").css({ "color": "white" });
                 },
                 error: function (err) {
@@ -46,20 +46,18 @@ Vue.component("steam-list", {
             <h3>Steam table goes here...</h3>
             <input type="text" id="steamNum" />
             <button id="#getsteam" @click="getSteamId">Get Steam data</button>
+            <div v-if="this.signedIn === true">
                 <section id="gamelist">
-                    <template v-for="friend in this.ContentData">
-                        <steam-item
-                        type="FRIEND">
-                        </steam-item>
-.message);                    </template>
+                    <template v-for="item in contentData[0]">
+                        <p>{{item}}</p>
+                  </template>
                 </section>
                 <section id="friendList">
-                    <template v-for="game in this.ContentData">
-                        <steam-item
-                        type="GAME">
-                        </steam-item>
+                    <template v-for="item in contentData[1]">
+                        <p>{{item}}</p>
                     </template>
                 </section>
+                </div>
             </div>
         `
 });
@@ -225,7 +223,7 @@ var vm = new Vue({
     data: {
         twitchResults: [],
         ytResults: [],
-        steamResults: [[], []],
+        steamResults: [],
         twitchName: "",
         steamId: ""
     },
@@ -284,7 +282,7 @@ The following code is from the YouTube Data API quickstart guide, with some slig
 See https://developers.google.com/youtube/v3/quickstart/js.
 */
 
-var CLIENT_ID = KEY_Y;
+var CLIENT_ID = "372774319049-pk9d85udr75rlqcluuq12apdeqtnk8go.apps.googleusercontent.com";
 var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"];
 var SCOPES = 'https://www.googleapis.com/auth/youtube.readonly';
 
