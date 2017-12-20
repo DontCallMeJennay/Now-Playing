@@ -28,7 +28,8 @@ gulp.task('concat-vues', () => {
 gulp.task('build-js', ['concat-vues'], () => {
     return streamQ({ objectMode: true },
         gulp.src('src/scripts/vue-components.js'),
-        gulp.src('src/scripts/*.js')
+        gulp.src('src/scripts/client.js'),
+        gulp.src('src/scripts/gapi.js')
     )
         .pipe(concat('client.js'))
         .pipe(babel({
