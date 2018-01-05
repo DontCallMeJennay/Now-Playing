@@ -5,6 +5,7 @@
 4. Classes for Twitch section
 5. Classes for YouTube section
 6. Media queries
+7. Vue-specific transitions
 */
 
 //// 1. Variables ////
@@ -109,6 +110,9 @@ footer {
 }
 
 .purple {
+    table {
+        border: 2px double $tpurple;
+    }
     thead th {
         font-size: 1.2rem;
         margin: 0;

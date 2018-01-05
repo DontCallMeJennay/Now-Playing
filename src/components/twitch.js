@@ -1,11 +1,25 @@
 Vue.component("twitch-list", {
     props: {
-        contentTitle: String,
-        contentData: Array,
-        contentType: String,
-        clearList: Function,
-        getStreamList: Function,
-        twitchName: String
+        contentTitle: {
+            type: String,
+            required: true
+        },
+        contentData: {
+            type: Array,
+            required: true
+        },
+        getStreamList: {
+            type: Function,
+            required: true
+        },
+        twitchName: {
+            type: String,
+            required: true
+        },
+        view: {
+            type: String,
+            required: true
+        }
     },
     data: function () {
         return {
@@ -22,8 +36,8 @@ Vue.component("twitch-list", {
                 vm.getStreamList(this.user);
                 this.signedIn = true;
                 localStorage.setItem("twitchName", this.user);
-            } else {
-                console.log("Please enter a username");
+            } else {                
+                uname.placeholder = "Please enter a username!";
             }
         },
         clearData: function () {
@@ -40,8 +54,8 @@ Vue.component("twitch-list", {
             this.user = x;
         }
     },
-    template: `
-        <div class="content">
+    template: `    
+        <div class="content" v-show="view==='twitch'">
             <section class="line" v-if="this.signedIn === false">
                 <div><label for="username">Enter Twitch username</label>
                 <input class="tinput" type="text" v-model=user id="username"/>
@@ -52,7 +66,6 @@ Vue.component("twitch-list", {
                 <p id="msg">Showing Twitch.tv stream list for <span class="bigname">{{user}}</span></p>
                 <button class="tbtn" id="twitch-signout" style="display: block;" @click=clearData()>Clear</button>
             </section>
-        <hr />
         <table class="purple" v-if="this.signedIn === true">
             <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead>

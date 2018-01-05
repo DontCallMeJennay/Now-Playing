@@ -2,7 +2,11 @@ Vue.component("youtube-list", {
     props: {
         contentTitle: String,
         contentData: Array,
-        contentType: String
+        contentType: String,
+        view: {
+            type: String,
+            required: true
+        }
     },
     methods: {
         snip: function (string) {
@@ -11,13 +15,11 @@ Vue.component("youtube-list", {
         }
     },
     template: `
-        <div class="content">
-        <hr />
+        <div class="content" v-show="view==='youtube'">
             <div class="line">            
             <button class="ybtn" id="authorize-button" style="display: block;">Authorize Y</button>
             <button class="ybtn" id="signout-button" style="display: block;">Sign out of YouTube</button>
             </div>
-            <hr />
             <table class="red" v-if="this.contentData.length > 0">
                 <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead v-if="this.contentData.length > 0">

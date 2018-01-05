@@ -1,23 +1,22 @@
 Vue.component("control-panel", {
     props: {
-        getName: Function,
-        user: String
+        setView: {
+            type: Function,
+            required: true
+        }
     },
     data: function() {
         return {
-            signedIn: false
+            twitch_signedIn: true,
+            youtube_signedIn: true,
+            steam_signedIn: true
         }
-    },    
+    },  
     template: `
-        <section>
-            <div>
-                <label for="username">Enter Twitch.tv username</label>
-                <input type="text" v-model=user id="username"/>
-                <button class="btn-filter" id="twitch-auth" @click=getName()>Get follow list</button></button>
-            </div>
-            <div>
-                <button class="btn-filter" id="authorize-button" style="display: block;">Authorize Y</button>
-                <button class="btn-filter" id="signout-button" style="display: block;">Sign out of YouTube</button>
-            </div>
+        <section class="line">
+        <p id="msg"></p>
+            <button class="page-btn" id="games" @click="setView('twitch')"><i class="fa fa-2x fa-twitch" aria-hidden="true"></i></button>
+            <button class="page-btn" id="videos" @click="setView('youtube')"><i class="fa fa-2x fa-youtube-play" aria-hidden="true"></i></button>
+            <button class="page-btn" id="steam"  @click="setView('steam')"><i class="fa fa-2x fa-steam-square" aria-hidden="true"></i></button>
         </section>`
 })

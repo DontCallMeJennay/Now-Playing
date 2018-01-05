@@ -5,10 +5,15 @@ var vm = new Vue({
         steamResults: [],
         twitchResults: [],
         ytResults: [],
-        twitchName: localStorage.getItem("twitchName"),
-        steamId: localStorage.getItem("steamId")
+        twitchName: "",
+        steamId: "",
+        view: "none"
     },
     methods: {
+        setView: function (str) {
+            this.view = str;
+            console.log("setView to: ", this.view);
+        },
         setUser: function (user) {
             this.twitchName = user;
         },
@@ -66,17 +71,19 @@ var vm = new Vue({
     },
     template: `
         <div>
+        <control-panel :set-view="setView"></control-panel>
+        <hr />
         <section class="twitch" id="tList">
-            <twitch-list content-title="Twitch.tv" :content-data="twitchResults" :get-stream-list="getStreamList">
+            <twitch-list content-title="Twitch.tv" :content-data="twitchResults" :get-stream-list="getStreamList" :view="view" :twitch-name="twitchName">
             </twitch-list>
         </section>
         <section class="you" id="yList">
-            <youtube-list content-title="YouTube" :content-data="ytResults">
+            <youtube-list content-title="YouTube" :content-data="ytResults" :view="view">
             </youtube-list>
         </section>
         <!--
         <section id="sList">
-            <steam-list content-title="Steam" :content-data="steamResults">
+            <steam-list content-title="Steam" :content-data="steamResults" :view="view">
             </steam-list>
         </section>
     -->
