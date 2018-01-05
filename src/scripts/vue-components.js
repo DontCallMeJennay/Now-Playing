@@ -1,3 +1,27 @@
+Vue.component("control-panel", {
+    props: {
+        getName: Function,
+        user: String
+    },
+    data: function() {
+        return {
+            signedIn: false
+        }
+    },    
+    template: `
+        <section>
+            <div>
+                <label for="username">Enter Twitch.tv username</label>
+                <input type="text" v-model=user id="username"/>
+                <button class="btn-filter" id="twitch-auth" @click=getName()>Get follow list</button></button>
+            </div>
+            <div>
+                <button class="btn-filter" id="authorize-button" style="display: block;">Authorize Y</button>
+                <button class="btn-filter" id="signout-button" style="display: block;">Sign out of YouTube</button>
+            </div>
+        </section>`
+})
+
 Vue.component("steam-list", {
     props: {
         contentTitle: String,
@@ -78,7 +102,8 @@ Vue.component("twitch-list", {
     data: function () {
         return {
             user: this.twitchName,
-            signedIn: false
+            signedIn: false,
+            err: false
         }
     },
     methods: {
@@ -115,7 +140,7 @@ Vue.component("twitch-list", {
                 <button class="btn-filter" id="twitch-auth" @click=getName()>Get follow list</button></button>
             </section>
             <section v-if="this.signedIn === true">
-                <span>Signed in as {{user}}</span>
+                <span id="msg">Signed in to Twitch.tv as {{user}}</span>
                 <button class="btn-filter" id="twitch-signout" style="display: block;" @click=clearData()>Clear Twitch list</button>
             </section>
 
@@ -148,7 +173,6 @@ Vue.component("twitch-result", {
     template: `<tr class="row">
                 <th scope="row"><img :src="logo" :alt="name + ' stream logo'"></th>
                 <td><span class="names"><a :href="url"> {{ name }} </a></span></td>
-                <td><span> {{ game }} </span> </td>
                 <td><span class="sm-hide"> <a :href="url"> {{ status }} </a></span></td>
                 </tr>`,
 })

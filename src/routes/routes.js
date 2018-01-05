@@ -68,7 +68,7 @@ router.post("/steam", function (req, res, next) {
     });
 });
 
-router.post('/streams', function (req, res, next) {
+router.post('/streams', function (req, res, next) {    
     let user = req.headers.username;
     var getList = new Promise((resolve, reject) => {
         let options = {
@@ -95,23 +95,26 @@ router.post('/streams', function (req, res, next) {
                             userList.push(res.data[i]["to_id"]);
                         }
                         const userStr = userList.join("&user_id=");
+                        //console.log(userStr);
                         let options = {
                             uri: "https://api.twitch.tv/helix/streams?first=100&user_id=" + userStr,
                             headers: {
                                 "Client-ID": KEY_T
                             },
                             json: true
-                        };
-                        rp(options)                     //requesting details for follow list
+                        };                        
+                        rp(options)                     //requesting IDs on follow list
                             .then((res) => {
                                 let allData = [];
+                                let idData = [];                
                                 let getNames = [];
-                                allData.push(res.data);
                                 for (var j in res.data) {
-                                    if (res.data[j].type === "live") {
+                                    if (res.data[j].community_ids.length > 0 && res.data[j].type === "live") {
+                                        idData.push(res.data[j]);
                                         getNames.push(res.data[j]["user_id"]);
                                     }
                                 }
+                                allData.push(idData);
                                 let options = {
                                     uri: "https://api.twitch.tv/helix/users?id=" + getNames.join("&id="),
                                     headers: {
@@ -125,19 +128,19 @@ router.post('/streams', function (req, res, next) {
                                         resolve(allData);
                                     })
                                     .catch((err) => {
-                                        console.log(err);
+                                        res.send({"err": "Could not display stream list"});
                                     });
                             })
                             .catch((err) => {
-                                console.log(err);
+                                res.send({"err": "Could not retrieve stream data"});
                             });
                     })
                     .catch((err) => {
-                        console.log(err);
+                        res.send({"err": "Could not retrieve follower list"});
                     });
             })
             .catch((err) => {
-                console.log(err);
+                res.send({"err": "Username not found"});
             });
     });
     Promise.resolve(getList).then((data) => {
