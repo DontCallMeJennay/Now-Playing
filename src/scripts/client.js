@@ -104,6 +104,8 @@ var vm = new Vue({
             });
         },
         setStreamList: function (data) {
+            console.log(data[0]);
+            console.log(data[1]);
             for (var i = 0; i < data[0].length; i++) {
                 data[0][i]["display_name"] = data[1][i]["display_name"];
                 data[0][i]["logo"] = data[1][i]["profile_image_url"];
