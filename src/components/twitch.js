@@ -42,17 +42,18 @@ Vue.component("twitch-list", {
     },
     template: `
         <div class="content">
-            <section v-if="this.signedIn === false">
-                <label for="username">Enter Twitch.tv username</label>
-                <input type="text" v-model=user id="username"/>
-                <button class="btn-filter" id="twitch-auth" @click=getName()>Get follow list</button></button>
+            <section class="line" v-if="this.signedIn === false">
+                <div><label for="username">Enter Twitch username</label>
+                <input class="tinput" type="text" v-model=user id="username"/>
+                </div>
+                <button class="tbtn" id="twitch-auth" @click=getName()>Get follow list</button></button>
             </section>
-            <section v-if="this.signedIn === true">
-                <span id="msg">Signed in to Twitch.tv as {{user}}</span>
-                <button class="btn-filter" id="twitch-signout" style="display: block;" @click=clearData()>Clear Twitch list</button>
+            <section class="line" v-if="this.signedIn === true">
+                <p id="msg">Showing Twitch.tv stream list for <span class="bigname">{{user}}</span></p>
+                <button class="tbtn" id="twitch-signout" style="display: block;" @click=clearData()>Clear</button>
             </section>
-
-        <table v-if="this.signedIn === true">
+        <hr />
+        <table class="purple" v-if="this.signedIn === true">
             <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead>
                     <tr>

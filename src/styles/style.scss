@@ -1,6 +1,17 @@
+/*
+1. Variables
+2. Element styles
+3. Base classes
+4. Classes for Twitch section
+5. Classes for YouTube section
+6. Media queries
+*/
+
+//// 1. Variables ////
 $tpurple: #4B367C;
 $gold: #B59243;
 $sblue: #495665;
+//// 2. Element styles ////
 a {
     text-decoration: none;
 }
@@ -15,40 +26,6 @@ body {
 
 h1 {
     font-family: 'Cabin', serif;
-}
-
-.twitch {
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-    flex: auto;
-    a:link {}
-    a:active,
-    a:hover {}
-    a:visited {}
-}
-
-td {
-    padding: 0 10px;
-}
-
-.row {
-    flex-direction: row !important;
-}
-
-.you {
-    td:not(.red) {
-        background-color: white;
-        padding: 5px;
-        text-align: center;
-    }
-    a:link {}
-    a:active,
-    a:hover {}
-    a:visited {}
-    .red {
-        background-color: red !important;
-    }
 }
 
 header {
@@ -80,13 +57,144 @@ footer {
     text-align: center;
 }
 
-hr {}
+//// 3. Base classes used by several modules ////
+.line {
+    display: flex;
+    justify-content: space-between;
+    vertical-align: middle;
+    label {
+        align-self: center;
+    }
+}
 
-button {
-    margin: auto;
+.row {
+    flex-direction: row !important;
+}
+
+.bigname {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: $tpurple;
+}
+
+.page-btn {
+    border-radius: 5px;
     min-width: 10%;
     padding: 0.75em;
-    line-height: 1;
+}
+
+.activeBtn {
+    color: white;
+    border-color: white;
+    transition: all 0.25s;
+}
+
+//// 4. Twitch-specific classes ////
+.twitch {
+    display: flex;
+    flex-direction: column;
+    margin: 2% auto;
+    flex: auto;
+    a:link {
+        color: black;
+    }
+    a:active,
+    a:focus {
+        color: $tpurple;
+        font-weight: bold;
+    }
+    a:visited {
+        font-weight: normal;
+    }
+}
+
+.purple {
+    thead th {
+        font-size: 1.2rem;
+        margin: 0;
+        padding: 0.5em;
+        background-color: $tpurple;
+        color: white;
+    }
+    td {
+        padding: 0 5px;
+    }
+    tr:nth-child(odd) {
+        background-color: rgba($tpurple, 0.1);
+    }
+    tr:nth-child(even) {
+        background-color: white;
+    }
+}
+
+.tbtn {
+    @extend .page-btn;
+    background-color: white;
+    border-radius: 20px;
+    border: 2px solid $tpurple;
+    color: $tpurple;
+    font-weight: bold;
+    transition: all 0.25s;
+}
+
+.tbtn:hover,
+.tbtn:active,
+.tbtn:focus {
+    @extend .activeBtn;
+    background-color: $tpurple;
+}
+
+.tinput {
+    @extend .tbtn;
+    border-radius: 5px;
+    font-weight: normal;
+    padding: 5px 1em;
+    margin-left: 2em;
+    text-align: center;
+}
+
+//// 5. YouTube-specific classes ////
+.you {
+    display: flex;
+    flex-direction: column;
+    margin: 2% auto;
+    a:link {
+        color: black;
+    }
+    a:active,
+    a:focus {
+        color: red;
+        font-weight: bold;
+    }
+    a:visited {
+        color: rgba(red, 0.8);
+    }
+}
+
+.red {
+    thead th {
+        font-size: 1.2rem;
+        margin: 0;
+        padding: 0.5em;
+        background-color: red;
+        color: white;
+    }
+    td {
+        padding: 0.5em;
+        flex-grow: 2;
+    }
+    tr:nth-child(odd) {
+        background-color: rgba(red, 0.1);
+    }
+    tr:nth-child(even) {
+        background-color: white;
+    }
+}
+
+.ybtn {
+    @extend .tbtn;
+    color: red;
+    border-color: red;
 }
 
 .names {
@@ -99,6 +207,7 @@ button {
     display: none;
 }
 
+//// 6. Media queries ////
 @media screen and (max-width: 800px) {
     body {
         margin: 2%;

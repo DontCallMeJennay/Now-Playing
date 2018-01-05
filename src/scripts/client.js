@@ -1,3 +1,4 @@
+
 var vm = new Vue({
     el: "#vue-app",
     data: {
@@ -69,7 +70,7 @@ var vm = new Vue({
             <twitch-list content-title="Twitch.tv" :content-data="twitchResults" :get-stream-list="getStreamList">
             </twitch-list>
         </section>
-        <section id="yList">
+        <section class="you" id="yList">
             <youtube-list content-title="YouTube" :content-data="ytResults">
             </youtube-list>
         </section>
