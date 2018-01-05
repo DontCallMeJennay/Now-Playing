@@ -104,13 +104,14 @@ var vm = new Vue({
             });
         },
         setStreamList: function (data) {
-            console.log(data[0]);
-            console.log(data[1]);
-            for (var i = 0; i < data[0].length; i++) {
+            let len = data[1].length;            
+            for (var i = 0; i < len; i++) {
                 data[0][i]["display_name"] = data[1][i]["display_name"];
                 data[0][i]["logo"] = data[1][i]["profile_image_url"];
+                data[0][i]["url"] = "https://www.twitch.tv/" + data[0][i]["display_name"];
+                
             }
-            this.twitchResults = data[0];
+            this.twitchResults = data[0].slice(0, len);
         },
         setSteamList: function (data) {
             this.steamResults = data;
