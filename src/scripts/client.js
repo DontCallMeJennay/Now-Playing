@@ -1,12 +1,11 @@
 var vm = new Vue({
     el: "#vue-app",
-    store: Ledger,
     data: {
-        steamResults: Ledger.state.s.results,
-        twitchResults: Ledger.state.t.results,
-        ytResults: Ledger.state.y.results,
-        twitchName: Ledger.state.t.username,
-        steamId: Ledger.state.s.username
+        steamResults: [],
+        twitchResults: [],
+        ytResults: [],
+        twitchName: localStorage.getItem("twitchName"),
+        steamId: localStorage.getItem("steamId")
     },
     methods: {
         setUser: function (user) {
@@ -22,7 +21,8 @@ var vm = new Vue({
                     $("#games").css({ "color": "#4B367C" });
                 },
                 error: function (err) {
-                    console.error(err);
+                    const msg = document.getElementById("msg");
+                    msg.innerHTML = "ERROR: " + err;
                 }
             });
         },
