@@ -43,7 +43,6 @@ var vm = new Vue({
         },
         setSteamList: function (data) {
             this.steamResults = data;
-            console.log("steamResults: ", data);
         },
         getVideoList: function (user) {
             //Thanks to Google API code, the videos pretty much get themselves.
@@ -62,7 +61,7 @@ var vm = new Vue({
         if (x) {
             this.setUser(x, "twitchName");
             this.getStreamList(this.twitchName);
-        }
+        }      
     },
     template: `
         <div>
