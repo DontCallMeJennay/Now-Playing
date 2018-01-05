@@ -128,19 +128,19 @@ router.post('/streams', function (req, res, next) {
                                         resolve(allData);
                                     })
                                     .catch((err) => {
-                                        console.log(err);
+                                        res.send({"err": "Could not display stream list"});
                                     });
                             })
                             .catch((err) => {
-                                console.log(err);
+                                res.send({"err": "Could not retrieve stream data"});
                             });
                     })
                     .catch((err) => {
-                        console.log(err);
+                        res.send({"err": "Could not retrieve follower list"});
                     });
             })
             .catch((err) => {
-                console.log(err);
+                res.send({"err": "Username not found"});
             });
     });
     Promise.resolve(getList).then((data) => {

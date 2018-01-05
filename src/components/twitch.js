@@ -10,7 +10,8 @@ Vue.component("twitch-list", {
     data: function () {
         return {
             user: this.twitchName,
-            signedIn: false
+            signedIn: false,
+            err: false
         }
     },
     methods: {
@@ -47,7 +48,7 @@ Vue.component("twitch-list", {
                 <button class="btn-filter" id="twitch-auth" @click=getName()>Get follow list</button></button>
             </section>
             <section v-if="this.signedIn === true">
-                <span>Signed in as {{user}}</span>
+                <span id="msg">Signed in to Twitch.tv as {{user}}</span>
                 <button class="btn-filter" id="twitch-signout" style="display: block;" @click=clearData()>Clear Twitch list</button>
             </section>
 
