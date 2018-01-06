@@ -1,1 +1,1 @@
-web: node public/client.js
+web: node server.js
