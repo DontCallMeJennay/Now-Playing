@@ -34,12 +34,6 @@ header {
     flex-flow: row;
     justify-content: space-between;
     margin-bottom: 0;
-    span {
-        display: flex;
-        flex-flow: row;
-        justify-content: flex-end;
-        margin: 0;
-    }
 }
 
 section {
@@ -56,6 +50,10 @@ img {
 footer {
     margin: 1% auto;
     text-align: center;
+}
+
+table {
+    box-shadow: 2px 2px 5px #999;
 }
 
 //// 3. Base classes used by several modules ////
@@ -90,6 +88,15 @@ footer {
     transition: all 0.25s;
 }
 
+.tabs {
+    @extend .line;
+    justify-content: flex-end;
+    button {
+        background-color: white;
+        margin: 5px;
+    }
+}
+
 //// 4. Twitch-specific classes ////
 .twitch {
     display: flex;
@@ -110,9 +117,6 @@ footer {
 }
 
 .purple {
-    table {
-        border: 2px double $tpurple;
-    }
     thead th {
         font-size: 1.2rem;
         margin: 0;

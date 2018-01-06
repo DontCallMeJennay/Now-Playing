@@ -25,11 +25,6 @@ header {
   flex-flow: row;
   justify-content: space-between;
   margin-bottom: 0; }
-  header span {
-    display: flex;
-    flex-flow: row;
-    justify-content: flex-end;
-    margin: 0; }
 
 section {
   margin-top: 0; }
@@ -44,11 +39,14 @@ footer {
   margin: 1% auto;
   text-align: center; }
 
-.line {
+table {
+  box-shadow: 2px 2px 5px #999; }
+
+.line, .tabs {
   display: flex;
   justify-content: space-between;
   vertical-align: middle; }
-  .line label {
+  .line label, .tabs label {
     align-self: center; }
 
 .row {
@@ -75,6 +73,12 @@ footer {
   border-color: white;
   transition: all 0.25s; }
 
+.tabs {
+  justify-content: flex-end; }
+  .tabs button {
+    background-color: white;
+    margin: 5px; }
+
 .twitch {
   display: flex;
   flex-direction: column;
@@ -89,8 +93,6 @@ footer {
   .twitch a:visited {
     font-weight: normal; }
 
-.purple table {
-  border: 2px double #4B367C; }
 .purple thead th {
   font-size: 1.2rem;
   margin: 0;

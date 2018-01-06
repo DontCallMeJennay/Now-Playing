@@ -13,7 +13,7 @@ Vue.component("control-panel", {
         }
     },  
     template: `
-        <section class="line">
+        <section class="tabs">
         <p id="msg"></p>
             <button class="page-btn" id="games" @click="setView('twitch')"><i class="fa fa-2x fa-twitch" aria-hidden="true"></i></button>
             <button class="page-btn" id="videos" @click="setView('youtube')"><i class="fa fa-2x fa-youtube-play" aria-hidden="true"></i></button>
@@ -208,7 +208,7 @@ Vue.component("youtube-list", {
     template: `
         <div class="content" v-show="view==='youtube'">
             <div class="line">            
-            <button class="ybtn" id="authorize-button" style="display: block;">Authorize Y</button>
+            <button class="ybtn" id="authorize-button" style="display: block;">Log in to YouTube</button>
             <button class="ybtn" id="signout-button" style="display: block;">Sign out of YouTube</button>
             </div>
             <table class="red" v-if="this.contentData.length > 0">
