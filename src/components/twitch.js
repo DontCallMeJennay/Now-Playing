@@ -1,11 +1,25 @@
 Vue.component("twitch-list", {
     props: {
-        contentTitle: String,
-        contentData: Array,
-        contentType: String,
-        clearList: Function,
-        getStreamList: Function,
-        twitchName: String
+        contentTitle: {
+            type: String,
+            required: true
+        },
+        contentData: {
+            type: Array,
+            required: true
+        },
+        getStreamList: {
+            type: Function,
+            required: true
+        },
+        twitchName: {
+            type: String,
+            required: true
+        },
+        view: {
+            type: String,
+            required: true
+        }
     },
     data: function () {
         return {
@@ -22,8 +36,8 @@ Vue.component("twitch-list", {
                 vm.getStreamList(this.user);
                 this.signedIn = true;
                 localStorage.setItem("twitchName", this.user);
-            } else {
-                console.log("Please enter a username");
+            } else {                
+                uname.placeholder = "Please enter a username!";
             }
         },
         clearData: function () {
@@ -31,6 +45,7 @@ Vue.component("twitch-list", {
             this.user = "";
             localStorage.removeItem("twitchName");
             vm.clearList();
+            $("#games").css({"backgroundColor": "white", "color": "#4B367C"});
         }
     },
     mounted() {
@@ -40,19 +55,19 @@ Vue.component("twitch-list", {
             this.user = x;
         }
     },
-    template: `
-        <div class="content">
-            <section v-if="this.signedIn === false">
-                <label for="username">Enter Twitch.tv username</label>
-                <input type="text" v-model=user id="username"/>
-                <button class="btn-filter" id="twitch-auth" @click=getName()>Get follow list</button></button>
+    template: `    
+        <div class="content" v-show="view==='twitch'">
+            <section class="line" v-if="this.signedIn === false">
+                <div><label for="username">Enter Twitch username</label>
+                <input class="tinput" type="text" v-model=user id="username"/>
+                </div>
+                <button class="tbtn" id="twitch-auth" @click=getName()>Get follow list</button></button>
             </section>
-            <section v-if="this.signedIn === true">
-                <span id="msg">Signed in to Twitch.tv as {{user}}</span>
-                <button class="btn-filter" id="twitch-signout" style="display: block;" @click=clearData()>Clear Twitch list</button>
+            <section class="line" v-if="this.signedIn === true">
+                <p id="msg">Showing Twitch.tv stream list for <span class="bigname">{{user}}</span></p>
+                <button class="tbtn" id="twitch-signout" style="display: block;" @click=clearData()>Clear</button>
             </section>
-
-        <table v-if="this.signedIn === true">
+        <table class="purple" v-if="this.signedIn === true">
             <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead>
                     <tr>
@@ -81,6 +96,6 @@ Vue.component("twitch-result", {
     template: `<tr class="row">
                 <th scope="row"><img :src="logo" :alt="name + ' stream logo'"></th>
                 <td><span class="names"><a :href="url"> {{ name }} </a></span></td>
-                <td><span class="sm-hide"> <a :href="url"> {{ status }} </a></span></td>
+                <td><span> <a :href="url"> {{ status }} </a></span></td>
                 </tr>`,
 })

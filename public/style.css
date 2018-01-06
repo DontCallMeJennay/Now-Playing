@@ -1,3 +1,12 @@
+    /*
+1. Variables
+2. Element styles
+3. Base classes
+4. Classes for Twitch section
+5. Classes for YouTube section
+6. Media queries
+7. Vue-specific transitions
+*/
 a {
   text-decoration: none; }
 
@@ -11,54 +20,152 @@ body {
 h1 {
   font-family: 'Cabin', serif; }
 
-.twitch {
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  flex: auto; }
-
-td {
-  padding: 0 10px; }
-
-.row {
-  flex-direction: row !important; }
-
-.you td:not(.red) {
-  background-color: white;
-  padding: 5px;
-  text-align: center; }
-.you .red {
-  background-color: red !important; }
-
 header {
   display: flex;
   flex-flow: row;
   justify-content: space-between;
   margin-bottom: 0; }
-  header span {
-    display: flex;
-    flex-flow: row;
-    justify-content: flex-end;
-    margin: 0; }
 
 section {
   margin-top: 0; }
 
 img {
   border-radius: 50px;
-  height: 2em;
+  max-height: 3em;
   margin: 5px;
-  width: 2em; }
+  max-width: 2em; }
 
 footer {
   margin: 1% auto;
   text-align: center; }
 
-button {
-  margin: auto;
+table {
+  box-shadow: 2px 2px 5px #999; }
+
+.line, .tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1%;
+  vertical-align: middle; }
+  .line label, .tabs label {
+    align-self: center; }
+
+.row {
+  flex-direction: row !important; }
+
+.bigname {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #4B367C; }
+
+.page-btn, .tbtn, .tinput, .ybtn {
+  border-radius: 5px;
   min-width: 10%;
-  padding: 0.75em;
-  line-height: 1; }
+  padding: 0.75em; }
+
+.activeBtn, .tbtn:hover, .tinput:hover, .ybtn:hover,
+.tbtn:active,
+.tinput:active,
+.ybtn:active,
+.tbtn:focus,
+.tinput:focus,
+.ybtn:focus {
+  color: white;
+  border-color: white;
+  transition: all 0.25s; }
+
+.tabs {
+  justify-content: flex-end; }
+  .tabs button {
+    background-color: white;
+    margin: 5px; }
+
+.twitch {
+  display: flex;
+  flex-direction: column;
+  margin: 2% auto;
+  flex: auto; }
+  .twitch a:link {
+    color: black; }
+  .twitch a:active,
+  .twitch a:focus {
+    color: #4B367C;
+    font-weight: bold; }
+  .twitch a:visited {
+    font-weight: normal; }
+
+.purple thead th {
+  font-size: 1.2rem;
+  margin: 0;
+  padding: 0.5em;
+  background-color: #4B367C;
+  color: white; }
+.purple td {
+  padding: 0 5px; }
+.purple tr:nth-child(odd) {
+  background-color: rgba(75, 54, 124, 0.1); }
+.purple tr:nth-child(even) {
+  background-color: white; }
+
+.tbtn, .tinput, .ybtn {
+  background-color: white;
+  border-radius: 20px;
+  border: 2px solid #4B367C;
+  color: #4B367C;
+  font-weight: bold;
+  transition: all 0.25s; }
+
+.tbtn:hover, .tinput:hover, .ybtn:hover,
+.tbtn:active,
+.tinput:active,
+.ybtn:active,
+.tbtn:focus,
+.tinput:focus,
+.ybtn:focus {
+  background-color: #4B367C; }
+
+.tinput {
+  border-radius: 5px;
+  font-weight: normal;
+  padding: 5px 1em;
+  margin-left: 2em;
+  text-align: center; }
+
+.you {
+  display: flex;
+  flex-direction: column;
+  margin: 2% auto; }
+  .you a:link {
+    color: black; }
+  .you a:active,
+  .you a:focus {
+    color: red;
+    font-weight: bold; }
+  .you a:visited {
+    color: rgba(255, 0, 0, 0.8); }
+
+.red thead th {
+  font-size: 1.2rem;
+  margin: 0;
+  padding: 0.5em;
+  background-color: red;
+  color: white; }
+.red td {
+  padding: 0.5em;
+  flex-grow: 2; }
+.red tr:nth-child(odd) {
+  background-color: rgba(255, 0, 0, 0.1); }
+.red tr:nth-child(even) {
+  background-color: white; }
+
+.ybtn {
+  color: red;
+  border-color: red; }
+
+.ybtn:hover,
+.ybtn:active,
+.ybtn:focus {
+  background-color: red; }
 
 .names {
   font-family: "Cabin", serif;
@@ -76,7 +183,15 @@ button {
     font-size: 1em; }
 
   .sm-hide {
-    display: none; } }
+    display: none; }
+
+  thead th,
+  .bigname {
+    font-size: 1rem !important; }
+
+  table {
+    margin: 2% auto;
+    width: 80%; } }
 @media screen and (max-width: 500px) {
   body {
     font-size: 0.75rem; }

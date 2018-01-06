@@ -42,7 +42,7 @@ Vue.component("steam-list", {
         }
     },
     template: `
-            <div class="content">
+            <div class="content" v-if="view==='steam'">
             <h3>Steam table goes here...</h3>
             <input type="text" id="steamNum" />
             <button id="#getsteam" @click="getSteamId">Get Steam data</button>

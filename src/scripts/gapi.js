@@ -43,13 +43,19 @@ function initClient() {
  *  appropriately. After a sign-in, the API is called.
  */
 function updateSigninStatus(isSignedIn) {
+    let table = document.getElementById("ytable");
+    let button = document.getElementById("videos");
     if (isSignedIn) {
         authorizeButton.style.display = 'none';
         signoutButton.style.display = 'block';
+        table.style.display = 'initial';
         getSubscriptions();
     } else {
         authorizeButton.style.display = 'block';
-        signoutButton.style.display = 'none';
+        signoutButton.style.display = 'none';  
+        table.style.display = 'none';
+        videos.style.backgroundColor = "white";   
+        videos.style.color = "black";        
         vm.ytResults = [{}];
     }
 }

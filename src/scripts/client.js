@@ -1,13 +1,18 @@
+
 var vm = new Vue({
     el: "#vue-app",
     data: {
         steamResults: [],
         twitchResults: [],
         ytResults: [],
-        twitchName: localStorage.getItem("twitchName"),
-        steamId: localStorage.getItem("steamId")
+        twitchName: "",
+        steamId: "",
+        view: "none"
     },
     methods: {
+        setView: function (str) {
+            this.view = str;
+        },
         setUser: function (user) {
             this.twitchName = user;
         },
@@ -18,7 +23,7 @@ var vm = new Vue({
                 headers: { "username": user },
                 success: function (data) {
                     vm.setStreamList(data);
-                    $("#games").css({ "color": "#4B367C" });
+                    $("#games").css({ "backgroundColor": "#4B367C", "color": "white" });
                 },
                 error: function (err) {
                     const msg = document.getElementById("msg");
@@ -49,7 +54,7 @@ var vm = new Vue({
         },
         setVideoList: function (data) {
             this.ytResults = data;
-            $("#videos").css({ "color": "red" });
+            $("#videos").css({ "backgroundColor": "red", "color": "white" });
 
         },
         clearList: function () {
@@ -61,21 +66,27 @@ var vm = new Vue({
         if (x) {
             this.setUser(x, "twitchName");
             this.getStreamList(this.twitchName);
-        }      
+        }
     },
     template: `
         <div>
+        <header>
+            <h1>Now Playing!</h1> 
+            <control-panel :set-view="setView"></control-panel>
+        </header>
+        <hr />
+
         <section class="twitch" id="tList">
-            <twitch-list content-title="Twitch.tv" :content-data="twitchResults" :get-stream-list="getStreamList">
+            <twitch-list content-title="Twitch.tv" :content-data="twitchResults" :get-stream-list="getStreamList" :view="view" :twitch-name="twitchName">
             </twitch-list>
         </section>
-        <section id="yList">
-            <youtube-list content-title="YouTube" :content-data="ytResults">
+        <section class="you" id="yList">
+            <youtube-list content-title="YouTube" :content-data="ytResults" :view="view">
             </youtube-list>
         </section>
         <!--
         <section id="sList">
-            <steam-list content-title="Steam" :content-data="steamResults">
+            <steam-list content-title="Steam" :content-data="steamResults" :view="view">
             </steam-list>
         </section>
     -->

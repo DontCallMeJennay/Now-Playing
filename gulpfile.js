@@ -25,7 +25,7 @@ gulp.task('concat-vues', () => {
         .pipe(gulp.dest('src/scripts/'));
 });
 
-gulp.task('build-js', ['concat-vues', 'build-routes'], () => {
+gulp.task('build-js', ['concat-vues'], () => {
     return streamQ({ objectMode: true },
         gulp.src('src/scripts/store.js'),        
         gulp.src('src/scripts/vue-components.js'),
