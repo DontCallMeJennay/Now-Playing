@@ -95,6 +95,6 @@ Vue.component("twitch-result", {
     template: `<tr class="row">
                 <th scope="row"><img :src="logo" :alt="name + ' stream logo'"></th>
                 <td><span class="names"><a :href="url"> {{ name }} </a></span></td>
-                <td><span class="sm-hide"> <a :href="url"> {{ status }} </a></span></td>
+                <td><span> <a :href="url"> {{ status }} </a></span></td>
                 </tr>`,
 })

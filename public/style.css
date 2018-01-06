@@ -177,7 +177,15 @@ table {
     font-size: 1em; }
 
   .sm-hide {
-    display: none; } }
+    display: none; }
+
+  thead th,
+  .bigname {
+    font-size: 1rem !important; }
+
+  table {
+    margin: 2% auto;
+    width: 80%; } }
 @media screen and (max-width: 500px) {
   body {
     font-size: 0.75rem; }

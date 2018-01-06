@@ -26,7 +26,7 @@ Vue.component("youtube-list", {
                     <tr>
                         <th scope="col">Channel</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Description</th>
+                        <th scope="col" class="sm-hide">Description</th>
                     </tr>
                 </thead>
                 <tbody>   
@@ -66,6 +66,6 @@ Vue.component("youtube-result", {
     template: `<tr class="row">
                 <th scope="row"><img :src="logo" :alt="name + ' channel logo'"><span> {{newItem}} </span></th>
                 <td><span class="names"><a :href="'https://youtube.com/channel/' + url + '/videos'"> {{ name }} </a></span></td>
-                <td class="shorten"><span class="sm-hide"> <a :href="'https://youtube.com/channel/' + url + '/videos'"> {{ desc }} </a></span></td>
+                <td class="sm-hide"><span> <a :href="'https://youtube.com/channel/' + url + '/videos'"> {{ desc }} </a></span></td>
                 </tr>`,
 })
