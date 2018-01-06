@@ -27,6 +27,7 @@
     "dependencies": {
         "async": "^2.5.0",
         "babel-core": "^6.26.0",
+        "babel-polyfill": "^6.26.0",
         "dotenv": "^4.0.0",
         "express": "^4.16.2",
         "request": "^2.83.0",
