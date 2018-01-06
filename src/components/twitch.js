@@ -45,6 +45,7 @@ Vue.component("twitch-list", {
             this.user = "";
             localStorage.removeItem("twitchName");
             vm.clearList();
+            $("#games").css({"backgroundColor": "white", "color": "#4B367C"});
         }
     },
     mounted() {

@@ -17,7 +17,9 @@ Vue.component("control-panel", {
         <p id="msg"></p>
             <button class="page-btn" id="games" @click="setView('twitch')"><i class="fa fa-2x fa-twitch" aria-hidden="true"></i></button>
             <button class="page-btn" id="videos" @click="setView('youtube')"><i class="fa fa-2x fa-youtube-play" aria-hidden="true"></i></button>
+            <!--
             <button class="page-btn" id="steam"  @click="setView('steam')"><i class="fa fa-2x fa-steam-square" aria-hidden="true"></i></button>
+            -->
         </section>`
 })
 
@@ -136,6 +138,7 @@ Vue.component("twitch-list", {
             this.user = "";
             localStorage.removeItem("twitchName");
             vm.clearList();
+            $("#games").css({"backgroundColor": "white", "color": "#4B367C"});
         }
     },
     mounted() {
@@ -207,11 +210,11 @@ Vue.component("youtube-list", {
     },
     template: `
         <div class="content" v-show="view==='youtube'">
-            <div class="line">            
-            <button class="ybtn" id="authorize-button" style="display: block;">Log in to YouTube</button>
+            <div class="line">     
+            <button class="ybtn" id="authorize-button" style="display: block;">Log in to your YouTube account</button>
             <button class="ybtn" id="signout-button" style="display: block;">Sign out of YouTube</button>
             </div>
-            <table class="red" v-if="this.contentData.length > 0">
+            <table class="red" id="ytable">
                 <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead v-if="this.contentData.length > 0">
                     <tr>

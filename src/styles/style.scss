@@ -1,4 +1,4 @@
-/*
+    /*
 1. Variables
 2. Element styles
 3. Base classes
@@ -7,242 +7,250 @@
 6. Media queries
 7. Vue-specific transitions
 */
-
-//// 1. Variables ////
-$tpurple: #4B367C;
-$gold: #B59243;
-$sblue: #495665;
-//// 2. Element styles ////
-a {
-    text-decoration: none;
-}
-
-body {
-    font-family: 'Open Sans', sans-serif;
-    margin: 5% auto;
-    max-width: 1000px;
-    min-height: 99vh;
-    overflow-y: scroll;
-}
-
-h1 {
-    font-family: 'Cabin', serif;
-}
-
-header {
-    display: flex;
-    flex-flow: row;
-    justify-content: space-between;
-    margin-bottom: 0;
-}
-
-section {
-    margin-top: 0;
-}
-
-img {
-    border-radius: 50px;
-    height: 2em;
-    margin: 5px;
-    width: 2em;
-}
-
-footer {
-    margin: 1% auto;
-    text-align: center;
-}
-
-table {
-    box-shadow: 2px 2px 5px #999;
-}
-
-//// 3. Base classes used by several modules ////
-.line {
-    display: flex;
-    justify-content: space-between;
-    vertical-align: middle;
-    label {
-        align-self: center;
+    
+    //// 1. Variables ////
+    $tpurple: #4B367C;
+    $gold: #B59243;
+    $sblue: #495665;
+    //// 2. Element styles ////
+    a {
+        text-decoration: none;
     }
-}
-
-.row {
-    flex-direction: row !important;
-}
-
-.bigname {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: $tpurple;
-}
-
-.page-btn {
-    border-radius: 5px;
-    min-width: 10%;
-    padding: 0.75em;
-}
-
-.activeBtn {
-    color: white;
-    border-color: white;
-    transition: all 0.25s;
-}
-
-.tabs {
-    @extend .line;
-    justify-content: flex-end;
-    button {
-        background-color: white;
+    
+    body {
+        font-family: 'Open Sans', sans-serif;
+        margin: 5% auto;
+        max-width: 1000px;
+        min-height: 99vh;
+        overflow-y: scroll;
+    }
+    
+    h1 {
+        font-family: 'Cabin', serif;
+    }
+    
+    header {
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        margin-bottom: 0;
+    }
+    
+    section {
+        margin-top: 0;
+    }
+    
+    img {
+        border-radius: 50px;
+        max-height: 3em;
         margin: 5px;
+        max-width: 2em;
     }
-}
-
-//// 4. Twitch-specific classes ////
-.twitch {
-    display: flex;
-    flex-direction: column;
-    margin: 2% auto;
-    flex: auto;
-    a:link {
-        color: black;
+    
+    footer {
+        margin: 1% auto;
+        text-align: center;
     }
-    a:active,
-    a:focus {
+    
+    table {
+        box-shadow: 2px 2px 5px #999;
+    }
+    
+    //// 3. Base classes used by several modules ////
+    .line {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1%;
+        vertical-align: middle;
+        label {
+            align-self: center;
+        }
+    }
+    
+    .row {
+        flex-direction: row !important;
+    }
+    
+    .bigname {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: $tpurple;
+    }
+    
+    .page-btn {
+        border-radius: 5px;
+        min-width: 10%;
+        padding: 0.75em;
+    }
+    
+    .activeBtn {
+        color: white;
+        border-color: white;
+        transition: all 0.25s;
+    }
+    
+    .tabs {
+        @extend .line;
+        justify-content: flex-end;
+        button {
+            background-color: white;
+            margin: 5px;
+        }
+    }
+    
+    //// 4. Twitch-specific classes ////
+    .twitch {
+        display: flex;
+        flex-direction: column;
+        margin: 2% auto;
+        flex: auto;
+        a:link {
+            color: black;
+        }
+        a:active,
+        a:focus {
+            color: $tpurple;
+            font-weight: bold;
+        }
+        a:visited {
+            font-weight: normal;
+        }
+    }
+    
+    .purple {
+        thead th {
+            font-size: 1.2rem;
+            margin: 0;
+            padding: 0.5em;
+            background-color: $tpurple;
+            color: white;
+        }
+        td {
+            padding: 0 5px;
+        }
+        tr:nth-child(odd) {
+            background-color: rgba($tpurple, 0.1);
+        }
+        tr:nth-child(even) {
+            background-color: white;
+        }
+    }
+    
+    .tbtn {
+        @extend .page-btn;
+        background-color: white;
+        border-radius: 20px;
+        border: 2px solid $tpurple;
         color: $tpurple;
         font-weight: bold;
+        transition: all 0.25s;
     }
-    a:visited {
-        font-weight: normal;
-    }
-}
-
-.purple {
-    thead th {
-        font-size: 1.2rem;
-        margin: 0;
-        padding: 0.5em;
+    
+    .tbtn:hover,
+    .tbtn:active,
+    .tbtn:focus {
+        @extend .activeBtn;
         background-color: $tpurple;
-        color: white;
     }
-    td {
+    
+    .tinput {
+        @extend .tbtn;
+        border-radius: 5px;
+        font-weight: normal;
+        padding: 5px 1em;
+        margin-left: 2em;
+        text-align: center;
+    }
+    
+    //// 5. YouTube-specific classes ////
+    .you {
+        display: flex;
+        flex-direction: column;
+        margin: 2% auto;
+        a:link {
+            color: black;
+        }
+        a:active,
+        a:focus {
+            color: red;
+            font-weight: bold;
+        }
+        a:visited {
+            color: rgba(red, 0.8);
+        }
+    }
+    
+    .red {
+        thead th {
+            font-size: 1.2rem;
+            margin: 0;
+            padding: 0.5em;
+            background-color: red;
+            color: white;
+        }
+        td {
+            padding: 0.5em;
+            flex-grow: 2;
+        }
+        tr:nth-child(odd) {
+            background-color: rgba(red, 0.1);
+        }
+        tr:nth-child(even) {
+            background-color: white;
+        }
+    }
+    
+    .ybtn {
+        @extend .tbtn;
+        color: red;
+        border-color: red;
+    }
+    
+    .ybtn:hover,
+    .ybtn:active,
+    .ybtn:focus {
+        @extend .activeBtn;
+        background-color: red;
+    }
+    
+    .names {
+        font-family: "Cabin", serif;
+        font-size: 1.25em;
         padding: 0 5px;
     }
-    tr:nth-child(odd) {
-        background-color: rgba($tpurple, 0.1);
-    }
-    tr:nth-child(even) {
-        background-color: white;
-    }
-}
-
-.tbtn {
-    @extend .page-btn;
-    background-color: white;
-    border-radius: 20px;
-    border: 2px solid $tpurple;
-    color: $tpurple;
-    font-weight: bold;
-    transition: all 0.25s;
-}
-
-.tbtn:hover,
-.tbtn:active,
-.tbtn:focus {
-    @extend .activeBtn;
-    background-color: $tpurple;
-}
-
-.tinput {
-    @extend .tbtn;
-    border-radius: 5px;
-    font-weight: normal;
-    padding: 5px 1em;
-    margin-left: 2em;
-    text-align: center;
-}
-
-//// 5. YouTube-specific classes ////
-.you {
-    display: flex;
-    flex-direction: column;
-    margin: 2% auto;
-    a:link {
-        color: black;
-    }
-    a:active,
-    a:focus {
-        color: red;
-        font-weight: bold;
-    }
-    a:visited {
-        color: rgba(red, 0.8);
-    }
-}
-
-.red {
-    thead th {
-        font-size: 1.2rem;
-        margin: 0;
-        padding: 0.5em;
-        background-color: red;
-        color: white;
-    }
-    td {
-        padding: 0.5em;
-        flex-grow: 2;
-    }
-    tr:nth-child(odd) {
-        background-color: rgba(red, 0.1);
-    }
-    tr:nth-child(even) {
-        background-color: white;
-    }
-}
-
-.ybtn {
-    @extend .tbtn;
-    color: red;
-    border-color: red;
-}
-
-.names {
-    font-family: "Cabin", serif;
-    font-size: 1.25em;
-    padding: 0 5px;
-}
-
-.hidden {
-    display: none;
-}
-
-//// 6. Media queries ////
-@media screen and (max-width: 800px) {
-    body {
-        margin: 2%;
-    }
-    .names {
-        font-size: 1em;
-    }
-    .sm-hide {
+    
+    .hidden {
         display: none;
     }
-    thead th,
-    .bigname {
-        font-size: 1rem !important;
+    
+    //// 6. Media queries ////
+    @media screen and (max-width: 800px) {
+        body {
+            margin: 2%;
+        }
+        .names {
+            font-size: 1em;
+        }
+        .sm-hide {
+            display: none;
+        }
+        thead th,
+        .bigname {
+            font-size: 1rem !important;
+        }
+        table {
+            margin: 2% auto;
+            width: 80%;
+        }
     }
-    table {
-        margin: 2% auto;
-        width: 80%;
+    
+    @media screen and (max-width: 500px) {
+        body {
+            font-size: 0.75rem;
+        }
+        img {
+            height: 2em;
+            margin: auto;
+            width: 2em;
+        }
     }
-}
-
-@media screen and (max-width: 500px) {
-    body {
-        font-size: 0.75rem;
-    }
-    img {
-        height: 2em;
-        margin: auto;
-        width: 2em;
-    }
-}
