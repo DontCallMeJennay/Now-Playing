@@ -46,12 +46,11 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-node_modules/*
+node_modules/
 *.scssc
 *.scssc
 *.scssc
 *.scssc
 *.env
 .env
-public/*
 src/scripts/vue-components.js
