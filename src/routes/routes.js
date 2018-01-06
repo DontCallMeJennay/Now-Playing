@@ -1,5 +1,6 @@
 var express = require('express');
 var async = require('async');
+var babelrt = require('babel-runtime');
 var bodyParser = require('body-parser');
 var https = require('https');
 var request = require('request');
