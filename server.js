@@ -1,8 +1,8 @@
-
+//require('dotenv').config();
 var express = require('express');
 var app = express();
 var path = require('path');
-var index = require('./public/routes');
+var index = require('public/routes');
 var bodyParser = require('body-parser');
 var favicon = require('serve-favicon');
 var PORT = process.env.PORT || 3000;
