@@ -1,1 +1,153 @@
-"use strict"; function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e } } var _promise = require("C:\\Users\\Jenni\\Desktop\\Projects\\Now-Playing\\node_modules\\babel-runtime/core-js/promise"), _promise2 = _interopRequireDefault(_promise), express = require("express"), async = require("async"), bodyParser = require("body-parser"), https = require("https"), request = require("request"), rp = require("request-promise"), router = express.Router(), KEY_T = process.env.KEY_T, KEY_Y = process.env.KEY_Y, KEY_S = process.env.KEY_S, T_DATA = [], tCode = ""; router.get("/", function (e, t) { t.sendFile(__dirname + "/public/index.html") }), router.post("/steam", function (e, t, r) { var s = e.headers.username, i = new _promise2.default(function (e, t) { rp({ uri: "http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=" + KEY_S + "&steamid=" + s + "&relationship=friend", json: !0 }).then(function (t) { var r = t, i = []; for (var n in r.friendslist.friends) i.push(r.friendslist.friends[n].steamid); i = i.join(","), rp({ uri: "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=" + KEY_S + "&steamids=" + i, json: !0 }).then(function (t) { var r = []; r.push(t), rp({ uri: "http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" + KEY_S + "&include_appinfo=1&steamid=" + s + "&format=json", json: !0 }).then(function (t) { r.push(t), e(r) }).catch(function (e) { console.log(e) }) }).catch(function (e) { console.log(e) }) }).catch(function (e) { console.log(e) }) }); _promise2.default.resolve(i).then(function (e) { t.send(e) }) }), router.post("/streams", function (e, t, r) { var s = e.headers.username, i = new _promise2.default(function (e, r) { rp({ uri: "https://api.twitch.tv/helix/users?login=" + s, headers: { "Client-ID": KEY_T }, json: !0 }).then(function (t) { var r = t.data[0].id; rp({ uri: "https://api.twitch.tv/helix/users/follows?first=100&from_id=" + r, headers: { "Client-ID": KEY_T }, json: !0 }).then(function (t) { var r = []; for (var s in t.data) r.push(t.data[s].to_id); var i = r.join("&user_id="); rp({ uri: "https://api.twitch.tv/helix/streams?first=100&user_id=" + i, headers: { "Client-ID": KEY_T }, json: !0 }).then(function (t) { var r = [], s = [], i = []; for (var n in t.data) t.data[n].community_ids.length > 0 && "live" === t.data[n].type && (s.push(t.data[n]), i.push(t.data[n].user_id)); r.push(s); var o = { uri: "https://api.twitch.tv/helix/users?id=" + i.join("&id="), headers: { "Client-ID": KEY_T }, json: !0 }; rp(o).then(function (t) { r.push(t.data), e(r) }).catch(function (e) { t.send({ err: "Could not display stream list" }) }) }).catch(function (e) { t.send({ err: "Could not retrieve stream data" }) }) }).catch(function (e) { t.send({ err: "Could not retrieve follower list" }) }) }).catch(function (e) { t.send({ err: "Username not found" }) }) }); _promise2.default.resolve(i).then(function (e) { t.send(e) }) }), module.exports = router;
+var express = require('express');
+var async = require('async');
+var bodyParser = require('body-parser');
+var https = require('https');
+var request = require('request');
+var rp = require('request-promise');
+var router = express.Router();
+
+var KEY_T = process.env.KEY_T;
+var KEY_Y = process.env.KEY_Y;
+var KEY_S = process.env.KEY_S;
+
+var T_DATA = [];
+var tCode = "";
+
+router.get("/", function (request, response) {
+    response.sendFile(__dirname + '/public/index.html');
+});
+
+router.post("/steam", function (req, res, next) {
+    //let user = "76561198010153724";
+    let user = req.headers.username;
+    var getList = new Promise((resolve, reject) => {
+        let options = {
+            uri: `http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=${KEY_S}&steamid=${user}&relationship=friend`,
+            json: true
+        };
+        rp(options)                     //get friend list, then string together friend IDs
+            .then((res) => {
+                let data = res;
+                let str = [];
+                for (var i in data["friendslist"]["friends"]) {
+                    str.push(data["friendslist"]["friends"][i]["steamid"]);
+                }
+                str = str.join(",");
+                let options = {
+                    uri: `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${KEY_S}&steamids=${str}`,
+                    json: true
+                };
+                rp(options)             //Get info about friend IDs
+                    .then((res) => {
+                        let data = [];
+                        data.push(res);
+                        let options = {
+                            uri: `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${KEY_S}&include_appinfo=1&steamid=${user}&format=json`,
+                            json: true
+                        };
+                        rp(options)
+                            .then((res) => {
+                                data.push(res);
+                                resolve(data);
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    });
+
+    Promise.resolve(getList).then(function (data) {
+        res.send(data);
+    });
+});
+
+router.post('/streams', function (req, res, next) {    
+    let user = req.headers.username;
+    var getList = new Promise((resolve, reject) => {
+        let options = {
+            uri: "https://api.twitch.tv/helix/users?login=" + user,
+            headers: {
+                "Client-ID": KEY_T
+            },
+            json: true
+        };
+        rp(options)                                     //request numeric user ID for given username
+            .then((res) => {
+                let userid = res.data[0].id;
+                let options = {
+                    uri: "https://api.twitch.tv/helix/users/follows?first=100&from_id=" + userid,
+                    headers: {
+                        "Client-ID": KEY_T
+                    },
+                    json: true
+                };
+                rp(options)                             //use numeric ID to get follow list and assemble string
+                    .then((res) => {
+                        let userList = [];
+                        for (var i in res.data) {
+                            userList.push(res.data[i]["to_id"]);
+                        }
+                        const userStr = userList.join("&user_id=");
+                        //console.log(userStr);
+                        let options = {
+                            uri: "https://api.twitch.tv/helix/streams?first=100&user_id=" + userStr,
+                            headers: {
+                                "Client-ID": KEY_T
+                            },
+                            json: true
+                        };                        
+                        rp(options)                     //requesting IDs on follow list
+                            .then((res) => {
+                                let allData = [];
+                                let idData = [];                
+                                let getNames = [];
+                                for (var j in res.data) {
+                                    if (res.data[j].community_ids.length > 0 && res.data[j].type === "live") {
+                                        idData.push(res.data[j]);
+                                        getNames.push(res.data[j]["user_id"]);
+                                    }
+                                }
+                                allData.push(idData);
+                                let options = {
+                                    uri: "https://api.twitch.tv/helix/users?id=" + getNames.join("&id="),
+                                    headers: {
+                                        "Client-ID": KEY_T
+                                    },
+                                    json: true
+                                };
+                                rp(options)             //requesting display names for follow list user IDs
+                                    .then((res) => {
+                                        allData.push(res.data);
+                                        resolve(allData);
+                                    })
+                                    .catch((err) => {
+                                        res.send({"err": "Could not display stream list"});
+                                    });
+                            })
+                            .catch((err) => {
+                                res.send({"err": "Could not retrieve stream data"});
+                            });
+                    })
+                    .catch((err) => {
+                        res.send({"err": "Could not retrieve follower list"});
+                    });
+            })
+            .catch((err) => {
+                res.send({"err": "Username not found"});
+            });
+    });
+    Promise.resolve(getList).then((data) => {
+        res.send(data);
+    });
+
+});
+
+
+module.exports = router;

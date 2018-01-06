@@ -5,6 +5,7 @@
     "main": "server.js",
     "scripts": {
         "start": "node server.js",
+        "start-dev": "concurrently \"gulp\" \"nodemon server.js\"",
         "test": "mocha"
     },
     "author": "Jenni Corbus",

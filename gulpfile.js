@@ -44,9 +44,6 @@ gulp.task('build-js', ['concat-vues'], () => {
 gulp.task('build-routes', () => {
     return gulp.src('src/routes/**/*.js')
         .pipe(concat('routes.js'))
-        .pipe(babel({
-            presets: ['env']
-        }))
         .pipe(ugly())
         .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
         .pipe(gulp.dest('public/'));
