@@ -53,4 +53,5 @@ node_modules/
 *.scssc
 *.env
 .env
+public/
 src/scripts/vue-components.js

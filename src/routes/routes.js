@@ -19,10 +19,10 @@ router.get("/", function (request, response) {
 
 router.post("/steam", function (req, res, next) {
     //let user = "76561198010153724";
-    let user = req.headers.username;
+    let username = req.headers.username;
     var getList = new Promise((resolve, reject) => {
         let options = {
-            uri: `http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=${KEY_S}&steamid=${user}&relationship=friend`,
+            uri: `http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key=${KEY_S}&steamid=${username}&relationship=friend`,
             json: true
         };
         rp(options)                     //get friend list, then string together friend IDs
@@ -105,6 +105,7 @@ router.post('/streams', function (req, res, next) {
                         };                        
                         rp(options)                     //requesting IDs on follow list
                             .then((res) => {
+                                console.log(res.data);
                                 let allData = [];
                                 let idData = [];                
                                 let getNames = [];
