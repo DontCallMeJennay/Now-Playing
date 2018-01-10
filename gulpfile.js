@@ -20,14 +20,15 @@ gulp.task('sass', () => {
 });
 
 gulp.task('concat-vues', () => {
-    return gulp.src('src/components/*.js')
+    return streamQ({objectMode: true},
+        gulp.src('src/components/*.js')
+    )
         .pipe(concat('vue-components.js'))
         .pipe(gulp.dest('src/scripts/'));
 });
 
 gulp.task('build-js', ['concat-vues'], () => {
-    return streamQ({ objectMode: true },
-        gulp.src('src/scripts/store.js'),        
+    return streamQ({ objectMode: true },     
         gulp.src('src/scripts/vue-components.js'),
         gulp.src('src/scripts/client.js'),
         gulp.src('src/scripts/gapi.js')

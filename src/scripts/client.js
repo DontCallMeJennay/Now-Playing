@@ -1,4 +1,3 @@
-
 var vm = new Vue({
     el: "#vue-app",
     data: {
@@ -71,9 +70,9 @@ var vm = new Vue({
     template: `
         <div>
         <header>
-            <h1>Now Playing!</h1> 
-            <control-panel :set-view="setView"></control-panel>
+            <h1>Now Playing!</h1>             
         </header>
+        <control-panel :set-view="setView"></control-panel>
         <hr />
 
         <section class="twitch" id="tList">

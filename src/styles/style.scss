@@ -71,6 +71,11 @@
         flex-direction: row !important;
     }
     
+    .center {
+        justify-content: center;
+        text-align: center;
+    }
+    
     .bigname {
         font-size: 1.25rem;
         font-weight: bold;
