@@ -16,7 +16,8 @@ Vue.component("control-panel", {
             type: String,
             required: true
         },
-        twitchName: String
+        twitchName: String,
+        ytSignedIn: Boolean
     },
     data: function () {
         return {
@@ -44,14 +45,14 @@ Vue.component("control-panel", {
                 <button class="tbtn" id="twitch-auth" @click=getName()>Get follow list</button></button>
             </div>
             <hr />
-            <div class="line center">     
+            <div class="line center">
                 <button class="ybtn" id="authorize-button" style="display: block;">Log in to your YouTube account</button>
                 <button class="ybtn" id="signout-button" style="display: block;">Sign out of YouTube</button>
             </div>
             <hr />
             <div class="line" v-if="this.steamId === ''">
             <label for="getsteam">Enter Steam ID</label>
-                <input type="text" class="stinput" id="steamNum" />
+                <input type="text" class="stinput" id="steamNum" value="76561197960435530"/>
                 <button class="stbtn" id="#getsteam" @click="getSteamId">Get Steam data</button>
             </div>
         </section>
@@ -282,7 +283,8 @@ Vue.component("youtube-list", {
         view: {
             type: String,
             required: true
-        }
+        },
+        ytSignedIn: Boolean
     },
     methods: {
         snip: function (string) {
@@ -292,6 +294,7 @@ Vue.component("youtube-list", {
     },
     template: `
         <div class="content" v-show="view==='youtube'">
+            <button class="ybtn" id="signout-button" v-if="ytSignedIn">Sign out of YouTube</button>
             <table class="red" id="ytable">
                 <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead v-if="this.contentData.length > 0">

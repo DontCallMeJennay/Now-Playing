@@ -4,8 +4,9 @@ var vm = new Vue({
         steamResults: [],
         twitchResults: [],
         ytResults: [],
-        twitchName: "",
         steamId: "",
+        twitchName: "",
+        ytSignedIn: false,
         view: "none"
     },
     methods: {
@@ -71,12 +72,12 @@ var vm = new Vue({
                 headers: { "username": user },
                 success: function (data) {
                     vm.setSteamList(data);
-                    this.signedIn = true;
                     $("#steam").css({ "backgroundColor": "#495665", "color": "white" });                    
                     
                 },
                 error: function (err) {
-                    console.log(err.statusCode);
+                    var msg = document.getElementById("msg");
+                    msg.innerHTML = "ERROR: " + data.err;
                 }
             });
         },
@@ -113,7 +114,7 @@ var vm = new Vue({
         <header>
             <h1>Now Playing!</h1>             
         </header>
-        <control-panel :set-view="setView" :twitch-name="twitchName" :steam-id="steamId" :get-name="getName" :get-steam-id="getSteamId" :clear-list="clearList"></control-panel>
+        <control-panel :set-view="setView" :twitch-name="twitchName" :steam-id="steamId" :get-name="getName" :get-steam-id="getSteamId" :clear-list="clearList" :yt-signed-in="ytSignedIn"></control-panel>
         <hr />
 
         <section class="twitch" id="tList">
@@ -121,7 +122,7 @@ var vm = new Vue({
             </twitch-list>
         </section>
         <section class="you" id="yList">
-            <youtube-list content-title="YouTube" :content-data="ytResults" :view="view">
+            <youtube-list content-title="YouTube" :content-data="ytResults" :view="view" :yt-signed-in="ytSignedIn">
             </youtube-list>
         </section>
         <section id="sList">

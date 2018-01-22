@@ -6,7 +6,8 @@ Vue.component("youtube-list", {
         view: {
             type: String,
             required: true
-        }
+        },
+        ytSignedIn: Boolean
     },
     methods: {
         snip: function (string) {
@@ -16,6 +17,7 @@ Vue.component("youtube-list", {
     },
     template: `
         <div class="content" v-show="view==='youtube'">
+            <button class="ybtn" id="signout-button" v-if="ytSignedIn">Sign out of YouTube</button>
             <table class="red" id="ytable">
                 <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead v-if="this.contentData.length > 0">
