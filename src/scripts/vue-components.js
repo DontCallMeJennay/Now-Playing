@@ -1,9 +1,22 @@
 Vue.component("control-panel", {
     props: {
+        getName: {
+            type: Function,
+            required: true
+        },
+        getSteamId: {
+            type: Function,
+            required: true
+        },
         setView: {
             type: Function,
             required: true
-        }
+        },
+        steamId: {
+            type: String,
+            required: true
+        },
+        twitchName: String
     },
     data: function () {
         return {
@@ -12,27 +25,34 @@ Vue.component("control-panel", {
             steam_signedIn: true
         }
     },
+
     template: `
     <div>
         <section class="tabs">
-            <p id="msg"></p>
+                <button class="page-btn" id="all" @click="setView('all')" disabled><i class="fa fa-asterisk" aria-hidden="true"></i></button>
                 <button class="page-btn" id="games" @click="setView('twitch')"><i class="fa fa-2x fa-twitch" aria-hidden="true"></i></button>
                 <button class="page-btn" id="videos" @click="setView('youtube')"><i class="fa fa-2x fa-youtube-play" aria-hidden="true"></i></button>
-                <!--
                 <button class="page-btn" id="steam"  @click="setView('steam')"><i class="fa fa-2x fa-steam-square" aria-hidden="true"></i></button>
-                -->
+                <button class="page-btn" id="fb"  @click="setView('fb')" disabled><i class="fa fa-2x fa-facebook" aria-hidden="true"></i></button>
+                <button class="page-btn" id="steam"  @click="setView('twitter')" disabled><i class="fa fa-2x fa-twitter" aria-hidden="true"></i></button>
         </section>
         <hr />
         <section class="logins">
-            <div class="line">
+            <div class="line" v-if="!this.twitchName">
                 <label for="username">Enter Twitch username</label>
-                <input class="tinput" type="text" v-model=user id="username"/>
+                <input class="tinput" type="text" id="username"/>
                 <button class="tbtn" id="twitch-auth" @click=getName()>Get follow list</button></button>
             </div>
             <hr />
             <div class="line center">     
                 <button class="ybtn" id="authorize-button" style="display: block;">Log in to your YouTube account</button>
                 <button class="ybtn" id="signout-button" style="display: block;">Sign out of YouTube</button>
+            </div>
+            <hr />
+            <div class="line" v-if="!this.steamId">
+            <label for="getsteam">Enter Steam ID</label>
+                <input type="text" class="stinput" id="steamNum" />
+                <button class="stbtn" id="#getsteam" @click="getSteamId">Get Steam data</button>
             </div>
         </section>
     </div>`
@@ -41,70 +61,102 @@ Vue.component("control-panel", {
 Vue.component("steam-list", {
     props: {
         contentTitle: String,
-        contentData: Array
+        contentData: Array,
+        getSteamInfo: {
+            type: Function,
+            required: true
+        },
+        view: {
+            type: String,
+            required: true
+        }
     },
     data: function () {
         return {
-            user: this.steamId,
-            signedIn: false
+            signedIn: false,
+            user: this.steamId
+        }
+    },
+    computed: {
+        sortedGames: function() {
+            return this.contentData[1].response.games.sort((a,b) => b.playtime_forever - a.playtime_forever);
         }
     },
     methods: {
         clearData: function () {
             this.signedIn = false;
             this.user = "";
-            localStorage.removeItem("steamName");
+            localStorage.removeItem("steamId");
             vm.clearList();
-        },
-        getSteamId: function () {
-            console.log("click");
-            let uinput = document.getElementById("steamNum").value;
-            console.log("uinput: ", uinput);
-            if (uinput !== "") {
-                this.getSteamInfo(uinput);                
-                localStorage.setItem("steamName", uinput);
-            }
-        },
-        getSteamInfo: function (user) {
-            $.ajax({
-                type: "POST",
-                url: "/steam",
-                headers: { "username": user },
-                success: function (data) {
-                    vm.setSteamList(data);
-                    this.signedIn = true;
-                    $("#steam").css({ "color": "white" });
-                },
-                error: function (err) {
-                    console.log(err.statusCode);
-                }
-            });
         }
     },
+
     template: `
-            <div class="content" v-if="view==='steam'">
-            <h3>Steam table goes here...</h3>
-            <input type="text" id="steamNum" />
-            <button id="#getsteam" @click="getSteamId">Get Steam data</button>
-            <div v-if="this.signedIn === true">
-                <section id="gamelist">
-                    <template v-for="item in contentData[0]">
-                        <p>{{item}}</p>
-                  </template>
-                </section>
-                <section id="friendList">
-                    <template v-for="item in contentData[1]">
-                        <p>{{item}}</p>
+            <div class="content steam" v-if="view==='steam'">
+            <table class="gray">
+            <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Player</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template v-for="item in contentData[0].response.players">
+                        <steam-player
+                        :logo="item.avatar"
+                        :name="item.personaname"
+                        :status="item.personastate"
+                        >
+                        </steam-player>
                     </template>
-                </section>
-                </div>
-            </div>
+                </tbody>
+            </table>
+
+            <table class="blue">
+            <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Game</th>
+                        <th scope="col">Time played</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <template v-for="item in sortedGames">
+                    <steam-game
+                    :game="item.name"
+                    :hours="item.playtime_forever">
+                    </steam-game>
+                    </template> 
+                </tbody>
+            </table>
+        </div>
         `
 });
 
-Vue.component("steam-item", {
-    props: ["type"],
-    template: `<p>Testing steam-item {{type}} component</p>`
+Vue.component("steam-player", {
+    props: {
+        logo: String,
+        name: String,
+        status: Number
+    },
+    template: `<tr v-if="status === 1 || status === 6">
+        <td><img :src="logo"></td>
+        <td>{{name}}</td>
+        <td v-if="status === 1">Online</td>
+        <td v-if="status === 6">Looking to play!</td>
+        </tr>`
+});
+Vue.component("steam-game", {
+    props: {
+        game: String,
+        hours: Number
+    },
+    template: `<tr v-if="hours > 10">
+        <td>{{game}}</td>
+        <td>{{hours}}</td>
+        </tr>`
 });
 const Ledger = new Vuex.Store({
     state: {
@@ -141,6 +193,10 @@ Vue.component("twitch-list", {
             type: Function,
             required: true
         },
+        setUser: {
+            type: Function,
+            required: true
+        },
         twitchName: {
             type: String,
             required: true
@@ -150,28 +206,15 @@ Vue.component("twitch-list", {
             required: true
         }
     },
-    data: function () {
+    data: function() {
         return {
             user: this.twitchName,
-            signedIn: false,
-            err: false
+            err: false,
         }
     },
     methods: {
-        getName: function () {
-            let uname = document.getElementById("username");
-            if (uname.value !== "") {
-                this.user = uname.value.toLowerCase();
-                vm.getStreamList(this.user);
-                this.signedIn = true;
-                localStorage.setItem("twitchName", this.user);
-            } else {                
-                uname.placeholder = "Please enter a username!";
-            }
-        },
         clearData: function () {
-            this.signedIn = false;
-            this.user = "";
+            this.setUser("");
             localStorage.removeItem("twitchName");
             vm.clearList();
             $("#games").css({"backgroundColor": "white", "color": "#4B367C"});
@@ -186,17 +229,11 @@ Vue.component("twitch-list", {
     },
     template: `    
         <div class="content" v-show="view==='twitch'">
-            <section class="line" v-if="this.signedIn === false">
-                <div><label for="username">Enter Twitch username</label>
-                <input class="tinput" type="text" v-model=user id="username"/>
-                </div>
-                <button class="tbtn" id="twitch-auth" @click=getName()>Get follow list</button></button>
+            <section class="line" v-if="this.twitchName">
+                <p id="msg">Showing Twitch.tv stream list for <span class="bigname">{{this.twitchName}}</span></p>
+                <button class="tbtn" id="twitch-signout" @click=clearData()>Clear</button>
             </section>
-            <section class="line" v-if="this.signedIn === true">
-                <p id="msg">Showing Twitch.tv stream list for <span class="bigname">{{user}}</span></p>
-                <button class="tbtn" id="twitch-signout" style="display: block;" @click=clearData()>Clear</button>
-            </section>
-        <table class="purple" v-if="this.signedIn === true">
+        <table class="purple" v-if="this.twitchName">
             <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead>
                     <tr>
@@ -246,10 +283,6 @@ Vue.component("youtube-list", {
     },
     template: `
         <div class="content" v-show="view==='youtube'">
-            <div class="line">     
-            <button class="ybtn" id="authorize-button" style="display: block;">Log in to your YouTube account</button>
-            <button class="ybtn" id="signout-button" style="display: block;">Sign out of YouTube</button>
-            </div>
             <table class="red" id="ytable">
                 <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead v-if="this.contentData.length > 0">

@@ -12,6 +12,10 @@ Vue.component("twitch-list", {
             type: Function,
             required: true
         },
+        setUser: {
+            type: Function,
+            required: true
+        },
         twitchName: {
             type: String,
             required: true
@@ -21,28 +25,15 @@ Vue.component("twitch-list", {
             required: true
         }
     },
-    data: function () {
+    data: function() {
         return {
             user: this.twitchName,
-            signedIn: false,
-            err: false
+            err: false,
         }
     },
     methods: {
-        getName: function () {
-            let uname = document.getElementById("username");
-            if (uname.value !== "") {
-                this.user = uname.value.toLowerCase();
-                vm.getStreamList(this.user);
-                this.signedIn = true;
-                localStorage.setItem("twitchName", this.user);
-            } else {                
-                uname.placeholder = "Please enter a username!";
-            }
-        },
         clearData: function () {
-            this.signedIn = false;
-            this.user = "";
+            this.setUser("");
             localStorage.removeItem("twitchName");
             vm.clearList();
             $("#games").css({"backgroundColor": "white", "color": "#4B367C"});
@@ -57,17 +48,11 @@ Vue.component("twitch-list", {
     },
     template: `    
         <div class="content" v-show="view==='twitch'">
-            <section class="line" v-if="this.signedIn === false">
-                <div><label for="username">Enter Twitch username</label>
-                <input class="tinput" type="text" v-model=user id="username"/>
-                </div>
-                <button class="tbtn" id="twitch-auth" @click=getName()>Get follow list</button></button>
+            <section class="line" v-if="this.twitchName">
+                <p id="msg">Showing Twitch.tv stream list for <span class="bigname">{{this.twitchName}}</span></p>
+                <button class="tbtn" id="twitch-signout" @click=clearData()>Clear</button>
             </section>
-            <section class="line" v-if="this.signedIn === true">
-                <p id="msg">Showing Twitch.tv stream list for <span class="bigname">{{user}}</span></p>
-                <button class="tbtn" id="twitch-signout" style="display: block;" @click=clearData()>Clear</button>
-            </section>
-        <table class="purple" v-if="this.signedIn === true">
+        <table class="purple" v-if="this.twitchName">
             <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead>
                     <tr>

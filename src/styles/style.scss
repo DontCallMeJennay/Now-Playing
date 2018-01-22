@@ -4,14 +4,15 @@
 3. Base classes
 4. Classes for Twitch section
 5. Classes for YouTube section
-6. Media queries
-7. Vue-specific transitions
+6. Classes for Steam section
+7. Media queries
 */
     
     //// 1. Variables ////
     $tpurple: #4B367C;
     $gold: #B59243;
-    $sblue: #495665;
+    $sgray: #495665;
+    $sblue: #8badb6;
     //// 2. Element styles ////
     a {
         text-decoration: none;
@@ -229,7 +230,65 @@
         display: none;
     }
     
-    //// 6. Media queries ////
+    //// 6. Steam-specific classes 
+    .steam {
+        display: flex;
+        flex-flow: row;
+        justify-content: space-around;
+    }
+    
+    .gray {
+        img {
+            border-radius: 0;
+        }
+        thead th {
+            font-size: 1.2rem;
+            margin: 0;
+            padding: 0.5em;
+            background-color: $sgray;
+            color: white;
+        }
+        td {
+            padding: 0.5em;
+            flex-grow: 2;
+        }
+        tr:nth-child(odd) {
+            background-color: rgba($sgray, 0.1);
+        }
+        tr:nth-child(even) {
+            background-color: white;
+        }
+    }
+    
+    .blue {
+        @extend .gray;
+        thead th {
+            background-color: $sblue;
+        }
+        tr:nth-child(odd) {
+            background-color: rgba($sblue, 0.1);
+        }
+    }
+    
+    .stbtn {
+        @extend .tbtn;
+        color: $sgray;
+        border-color: $sgray;
+    }
+    
+    .stbtn:hover,
+    .stbtn:active,
+    .stbtn:focus {
+        @extend .activeBtn;
+        background-color: $sgray;
+    }
+    
+    .stinput {
+        @extend .tinput;
+        @extend .stbtn;
+    }
+    
+    //// 7. Media queries ////
     @media screen and (max-width: 800px) {
         body {
             margin: 2%;

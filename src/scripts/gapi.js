@@ -1,6 +1,6 @@
 
 /*
-The following code is from the YouTube Data API quickstart guide, with some slight modifications.
+The following code is from the YouTube Data API quickstart guide, with some modifications.
 See https://developers.google.com/youtube/v3/quickstart/js.
 */
 

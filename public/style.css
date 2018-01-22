@@ -4,8 +4,8 @@
 3. Base classes
 4. Classes for Twitch section
 5. Classes for YouTube section
-6. Media queries
-7. Vue-specific transitions
+6. Classes for Steam section
+7. Media queries
 */
 a {
   text-decoration: none; }
@@ -63,18 +63,22 @@ table {
   font-weight: bold;
   color: #4B367C; }
 
-.page-btn, .tbtn, .tinput, .ybtn {
+.page-btn, .tbtn, .tinput, .stinput, .ybtn, .stbtn {
   border-radius: 5px;
   min-width: 10%;
   padding: 0.75em; }
 
-.activeBtn, .tbtn:hover, .tinput:hover, .ybtn:hover,
+.activeBtn, .tbtn:hover, .tinput:hover, .stinput:hover, .ybtn:hover, .stbtn:hover,
 .tbtn:active,
 .tinput:active,
+.stinput:active,
 .ybtn:active,
+.stbtn:active,
 .tbtn:focus,
 .tinput:focus,
-.ybtn:focus {
+.stinput:focus,
+.ybtn:focus,
+.stbtn:focus {
   color: white;
   border-color: white;
   transition: all 0.25s; }
@@ -112,7 +116,7 @@ table {
 .purple tr:nth-child(even) {
   background-color: white; }
 
-.tbtn, .tinput, .ybtn {
+.tbtn, .tinput, .stinput, .ybtn, .stbtn {
   background-color: white;
   border-radius: 20px;
   border: 2px solid #4B367C;
@@ -120,16 +124,20 @@ table {
   font-weight: bold;
   transition: all 0.25s; }
 
-.tbtn:hover, .tinput:hover, .ybtn:hover,
+.tbtn:hover, .tinput:hover, .stinput:hover, .ybtn:hover, .stbtn:hover,
 .tbtn:active,
 .tinput:active,
+.stinput:active,
 .ybtn:active,
+.stbtn:active,
 .tbtn:focus,
 .tinput:focus,
-.ybtn:focus {
+.stinput:focus,
+.ybtn:focus,
+.stbtn:focus {
   background-color: #4B367C; }
 
-.tinput {
+.tinput, .stinput {
   border-radius: 5px;
   font-weight: normal;
   padding: 5px 1em;
@@ -179,6 +187,43 @@ table {
 
 .hidden {
   display: none; }
+
+.steam {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-around; }
+
+.gray img, .blue img {
+  border-radius: 0; }
+.gray thead th, .blue thead th {
+  font-size: 1.2rem;
+  margin: 0;
+  padding: 0.5em;
+  background-color: #495665;
+  color: white; }
+.gray td, .blue td {
+  padding: 0.5em;
+  flex-grow: 2; }
+.gray tr:nth-child(odd), .blue tr:nth-child(odd) {
+  background-color: rgba(73, 86, 101, 0.1); }
+.gray tr:nth-child(even), .blue tr:nth-child(even) {
+  background-color: white; }
+
+.blue thead th {
+  background-color: #8badb6; }
+.blue tr:nth-child(odd) {
+  background-color: rgba(139, 173, 182, 0.1); }
+
+.stbtn, .stinput {
+  color: #495665;
+  border-color: #495665; }
+
+.stbtn:hover, .stinput:hover,
+.stbtn:active,
+.stinput:active,
+.stbtn:focus,
+.stinput:focus {
+  background-color: #495665; }
 
 @media screen and (max-width: 800px) {
   body {

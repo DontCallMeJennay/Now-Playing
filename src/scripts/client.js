@@ -12,8 +12,19 @@ var vm = new Vue({
         setView: function (str) {
             this.view = str;
         },
-        setUser: function (user) {
-            this.twitchName = user;
+        setUser: function (str, param) {
+            this[param] = str;
+        },
+        getName: function () {
+            let uname = document.getElementById("username");
+            if (uname.value !== "") {
+                this.twitchName = uname.value.toLowerCase();
+                this.getStreamList(this.twitchName);
+                this.signedIn = true;
+                localStorage.setItem("twitchName", this.twitchName);
+            } else {                
+                uname.placeholder = "Please enter a username!";
+            }
         },
         getStreamList: function (user) {
             $.ajax({
@@ -45,6 +56,29 @@ var vm = new Vue({
                 this.twitchResults = data[0].slice(0, len);
             }
         },
+        getSteamId: function () {
+            let uinput = document.getElementById("steamNum").value;
+            if (uinput !== "") {
+                this.getSteamInfo(uinput);                
+                localStorage.setItem("steamId", uinput);
+            }
+        },
+        getSteamInfo: function (user) {
+            $.ajax({
+                type: "POST",
+                url: "/steam",
+                headers: { "username": user },
+                success: function (data) {
+                    vm.setSteamList(data);
+                    this.signedIn = true;
+                    $("#steam").css({ "backgroundColor": "#495665", "color": "white" });                    
+                    
+                },
+                error: function (err) {
+                    console.log(err.statusCode);
+                }
+            });
+        },
         setSteamList: function (data) {
             this.steamResults = data;
         },
@@ -66,29 +100,32 @@ var vm = new Vue({
             this.setUser(x, "twitchName");
             this.getStreamList(this.twitchName);
         }
+        let y = localStorage.getItem("steamId");
+        if (y) {
+            this.setUser(y, "steamId");
+            this.getSteamInfo(this.steamId);
+        }
     },
     template: `
         <div>
         <header>
             <h1>Now Playing!</h1>             
         </header>
-        <control-panel :set-view="setView"></control-panel>
+        <control-panel :set-view="setView" :twitch-name="twitchName" :steam-id="steamId" :get-name="getName" :get-steam-id="getSteamId"></control-panel>
         <hr />
 
         <section class="twitch" id="tList">
-            <twitch-list content-title="Twitch.tv" :content-data="twitchResults" :get-stream-list="getStreamList" :view="view" :twitch-name="twitchName">
+            <twitch-list content-title="Twitch.tv" :content-data="twitchResults" :get-stream-list="getStreamList" :set-user="setUser" :view="view" :twitch-name="twitchName">
             </twitch-list>
         </section>
         <section class="you" id="yList">
             <youtube-list content-title="YouTube" :content-data="ytResults" :view="view">
             </youtube-list>
         </section>
-        <!--
         <section id="sList">
-            <steam-list content-title="Steam" :content-data="steamResults" :view="view">
+            <steam-list content-title="Steam" :content-data="steamResults" :view="view" :get-steam-info="getSteamInfo">
             </steam-list>
         </section>
-    -->
         </div>
     `
 });

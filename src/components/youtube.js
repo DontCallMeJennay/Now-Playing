@@ -16,10 +16,6 @@ Vue.component("youtube-list", {
     },
     template: `
         <div class="content" v-show="view==='youtube'">
-            <div class="line">     
-            <button class="ybtn" id="authorize-button" style="display: block;">Log in to your YouTube account</button>
-            <button class="ybtn" id="signout-button" style="display: block;">Sign out of YouTube</button>
-            </div>
             <table class="red" id="ytable">
                 <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead v-if="this.contentData.length > 0">

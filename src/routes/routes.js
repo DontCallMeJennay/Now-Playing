@@ -18,7 +18,7 @@ router.get("/", function (request, response) {
 });
 
 router.post("/steam", function (req, res, next) {
-    //let user = "76561198010153724";
+    //let user = "76561197960435530";
     let username = req.headers.username;
     var getList = new Promise((resolve, reject) => {
         let options = {
