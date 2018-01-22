@@ -12,7 +12,7 @@ var vm = new Vue({
         setView: function (str) {
             this.view = str;
         },
-        setUser: function (str, param) {
+        setUser: function (param, str) {
             this[param] = str;
         },
         getName: function () {
@@ -59,6 +59,7 @@ var vm = new Vue({
         getSteamId: function () {
             let uinput = document.getElementById("steamNum").value;
             if (uinput !== "") {
+                this.steamId = uinput;
                 this.getSteamInfo(uinput);                
                 localStorage.setItem("steamId", uinput);
             }
@@ -90,8 +91,9 @@ var vm = new Vue({
             $("#videos").css({ "backgroundColor": "red", "color": "white" });
 
         },
-        clearList: function () {
-            this.twitchResults = [];
+        clearList: function (user, param) {
+            this[user] = "";
+            this[param] = [];
         }
     },
     mounted() {
@@ -111,11 +113,11 @@ var vm = new Vue({
         <header>
             <h1>Now Playing!</h1>             
         </header>
-        <control-panel :set-view="setView" :twitch-name="twitchName" :steam-id="steamId" :get-name="getName" :get-steam-id="getSteamId"></control-panel>
+        <control-panel :set-view="setView" :twitch-name="twitchName" :steam-id="steamId" :get-name="getName" :get-steam-id="getSteamId" :clear-list="clearList"></control-panel>
         <hr />
 
         <section class="twitch" id="tList">
-            <twitch-list content-title="Twitch.tv" :content-data="twitchResults" :get-stream-list="getStreamList" :set-user="setUser" :view="view" :twitch-name="twitchName">
+            <twitch-list content-title="Twitch.tv" :content-data="twitchResults" :get-stream-list="getStreamList" :set-user="setUser" :view="view" :twitch-name="twitchName" :clear-list="clearList">
             </twitch-list>
         </section>
         <section class="you" id="yList">
@@ -123,7 +125,7 @@ var vm = new Vue({
             </youtube-list>
         </section>
         <section id="sList">
-            <steam-list content-title="Steam" :content-data="steamResults" :view="view" :get-steam-info="getSteamInfo">
+            <steam-list content-title="Steam" :content-data="steamResults" :view="view" :get-steam-info="getSteamInfo" :steam-id="steamId" :clear-list="clearList">
             </steam-list>
         </section>
         </div>

@@ -33,9 +33,9 @@ Vue.component("twitch-list", {
     },
     methods: {
         clearData: function () {
-            this.setUser("");
+            this.setUser("twitchName", "");
             localStorage.removeItem("twitchName");
-            vm.clearList();
+            vm.clearList("twitchName", "twitchResults");
             $("#games").css({"backgroundColor": "white", "color": "#4B367C"});
         }
     },

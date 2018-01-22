@@ -20,12 +20,12 @@ Vue.component("control-panel", {
     },
     data: function () {
         return {
-            twitch_signedIn: true,
-            youtube_signedIn: true,
-            steam_signedIn: true
+
         }
     },
-
+    mounted() {
+        console.log(this.steamId);
+    },
     template: `
     <div>
         <section class="tabs">
@@ -49,7 +49,7 @@ Vue.component("control-panel", {
                 <button class="ybtn" id="signout-button" style="display: block;">Sign out of YouTube</button>
             </div>
             <hr />
-            <div class="line" v-if="!this.steamId">
+            <div class="line" v-if="this.steamId === ''">
             <label for="getsteam">Enter Steam ID</label>
                 <input type="text" class="stinput" id="steamNum" />
                 <button class="stbtn" id="#getsteam" @click="getSteamId">Get Steam data</button>

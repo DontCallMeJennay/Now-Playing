@@ -20,12 +20,12 @@ Vue.component("control-panel", {
     },
     data: function () {
         return {
-            twitch_signedIn: true,
-            youtube_signedIn: true,
-            steam_signedIn: true
+
         }
     },
-
+    mounted() {
+        console.log(this.steamId);
+    },
     template: `
     <div>
         <section class="tabs">
@@ -49,7 +49,7 @@ Vue.component("control-panel", {
                 <button class="ybtn" id="signout-button" style="display: block;">Sign out of YouTube</button>
             </div>
             <hr />
-            <div class="line" v-if="!this.steamId">
+            <div class="line" v-if="this.steamId === ''">
             <label for="getsteam">Enter Steam ID</label>
                 <input type="text" class="stinput" id="steamNum" />
                 <button class="stbtn" id="#getsteam" @click="getSteamId">Get Steam data</button>
@@ -66,6 +66,10 @@ Vue.component("steam-list", {
             type: Function,
             required: true
         },
+        steamId: {
+            type: String,
+            required: true
+        },
         view: {
             type: String,
             required: true
@@ -73,8 +77,7 @@ Vue.component("steam-list", {
     },
     data: function () {
         return {
-            signedIn: false,
-            user: this.steamId
+            signedIn: false
         }
     },
     computed: {
@@ -85,14 +88,19 @@ Vue.component("steam-list", {
     methods: {
         clearData: function () {
             this.signedIn = false;
-            this.user = "";
             localStorage.removeItem("steamId");
-            vm.clearList();
+            vm.clearList("steamId", "steamResults");
+            $("#steam").css({"backgroundColor": "white", "color": "black"});
         }
     },
 
     template: `
-            <div class="content steam" v-if="view==='steam'">
+        <div class="content" v-if="view==='steam'">
+            <section class="line" v-if="this.steamId">
+            <p id="msg">Showing Steam friend and game lists for ID <span class="bigname">{{this.steamId}}</span></p>
+            <button class="stbtn" id="steam-signout" @click=clearData()>Clear</button>
+            </section>
+            <section class="steam" v-if="this.steamId">
             <table class="gray">
             <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead>
@@ -102,7 +110,7 @@ Vue.component("steam-list", {
                         <th scope="col">Status</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="contentData[0]">
                     <template v-for="item in contentData[0].response.players">
                         <steam-player
                         :logo="item.avatar"
@@ -122,7 +130,7 @@ Vue.component("steam-list", {
                         <th scope="col">Time played</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="contentData[1]">
                 <template v-for="item in sortedGames">
                     <steam-game
                     :game="item.name"
@@ -131,6 +139,7 @@ Vue.component("steam-list", {
                     </template> 
                 </tbody>
             </table>
+            </section>
         </div>
         `
 });
@@ -214,9 +223,9 @@ Vue.component("twitch-list", {
     },
     methods: {
         clearData: function () {
-            this.setUser("");
+            this.setUser("twitchName", "");
             localStorage.removeItem("twitchName");
-            vm.clearList();
+            vm.clearList("twitchName", "twitchResults");
             $("#games").css({"backgroundColor": "white", "color": "#4B367C"});
         }
     },

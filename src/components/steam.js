@@ -6,6 +6,10 @@ Vue.component("steam-list", {
             type: Function,
             required: true
         },
+        steamId: {
+            type: String,
+            required: true
+        },
         view: {
             type: String,
             required: true
@@ -13,8 +17,7 @@ Vue.component("steam-list", {
     },
     data: function () {
         return {
-            signedIn: false,
-            user: this.steamId
+            signedIn: false
         }
     },
     computed: {
@@ -25,14 +28,19 @@ Vue.component("steam-list", {
     methods: {
         clearData: function () {
             this.signedIn = false;
-            this.user = "";
             localStorage.removeItem("steamId");
-            vm.clearList();
+            vm.clearList("steamId", "steamResults");
+            $("#steam").css({"backgroundColor": "white", "color": "black"});
         }
     },
 
     template: `
-            <div class="content steam" v-if="view==='steam'">
+        <div class="content" v-if="view==='steam'">
+            <section class="line" v-if="this.steamId">
+            <p id="msg">Showing Steam friend and game lists for ID <span class="bigname">{{this.steamId}}</span></p>
+            <button class="stbtn" id="steam-signout" @click=clearData()>Clear</button>
+            </section>
+            <section class="steam" v-if="this.steamId">
             <table class="gray">
             <caption class="hidden" aria-hidden="false">{{contentTitle}}</caption>
                 <thead>
@@ -42,7 +50,7 @@ Vue.component("steam-list", {
                         <th scope="col">Status</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="contentData[0]">
                     <template v-for="item in contentData[0].response.players">
                         <steam-player
                         :logo="item.avatar"
@@ -62,7 +70,7 @@ Vue.component("steam-list", {
                         <th scope="col">Time played</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="contentData[1]">
                 <template v-for="item in sortedGames">
                     <steam-game
                     :game="item.name"
@@ -71,6 +79,7 @@ Vue.component("steam-list", {
                     </template> 
                 </tbody>
             </table>
+            </section>
         </div>
         `
 });
