@@ -12,7 +12,7 @@ This project was inspired by the [freeCodeCamp](https://freecodecamp.com) API pr
 
 ## Main Objectives
 
-* The user can visit a single app/page/dashboard, log in to multiple entertainment accounts, and see what new content is available. 
+* The user can visit a single app/page/dashboard, log in/out to multiple entertainment accounts, and see what new content is available. 
 * The information will initially be indicated with color-changing, numbered icons; tapping or clicking an icon will bring up a list of available content.
 * The user can select an item on the list and go to that site or app to view the content.
 
@@ -23,7 +23,8 @@ This project was inspired by the [freeCodeCamp](https://freecodecamp.com) API pr
 
 ## Tools and technologies
 * **Vue and Express** (and also some jQuery left over from a previous version of the project.)
-* **Social media and entertainment services.** YouTube, Twitch.tv, and Steam. Also considering Twitter.
+* **Social media and entertainment services.** YouTube, Twitch.tv, and Steam. Also considering various social media options.
+* **Gulp.** Yes, it would have been smarter to start out using Vue-CLI and Vuex. I tried to incorporate them partway through the project, but I found that instead of using the right tools for the project, I was trying too hard to make the project fit the tools. So, maybe next time.
 
 ### HARD MODE: Create out-of-browser experiences.
  * (?) Convert to desktop app with Electron
@@ -36,4 +37,6 @@ This project was inspired by the [freeCodeCamp](https://freecodecamp.com) API pr
 * ~~Figure out how to handle asynchronous updating with Vue~~
 * ~~Get a working page going with two services~~
 * ~~Set up OAuth and modify GETs so any user can access their stuff~~ authorization isn't always required for read access.
-* Research and add 1-3 more services
+* Research and add social media info
+* Consider making combined displays, e.g., streams from all sources, online friends from all sources
+* When all features work on Heroku, start on Electron app
