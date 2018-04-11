@@ -21,6 +21,7 @@ The first issue is that several of the services I intended to utilize have been 
 * Multi-step Gulp build including Babel, minification, and image and CSS processing
 
 .....
+
 This project was inspired by the [freeCodeCamp](https://freecodecamp.com) API projects, which require learners to query various public APIs (e.g., Twitch.tv, Wikipedia) and display the results on HTML pages. Completing those projects was exciting, but also frustrating because of the limitations of client-side queries. Now that I'm better equipped to work with the concept, I'm upgrading my project to something more useful.
 
 ## Main Objectives - completed
@@ -49,7 +50,7 @@ This project was inspired by the [freeCodeCamp](https://freecodecamp.com) API pr
 * ~~Rewrite previous project's GET/POST code~~
 * ~~Figure out how to handle asynchronous updating with Vue~~
 * ~~Get a working page going with two services~~
-* ~~Set up OAuth and modify GETs so any user can access their stuff~~ authorization isn't always required for read access.
-* ~~Research and add social media info
-* ~~Consider making combined displays, e.g., streams from all sources, online friends from all sources
-* ~~When all features work on Heroku, start on Electron app
+* ~~Set up OAuth and modify GETs so any user can access their stuff~~ authorization isn't always required for read access.~~
+* ~~Research and add social media info~~
+* ~~Consider making combined displays, e.g., streams from all sources, online friends from all sources~~
+* ~~When all features work on Heroku, start on Electron app~~
